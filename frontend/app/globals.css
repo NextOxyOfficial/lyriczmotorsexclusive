@@ -1,0 +1,64 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background: #090b10;
+  color: #f8fafc;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+.hud-grid {
+  background-image:
+    linear-gradient(rgba(40, 242, 156, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(40, 242, 156, 0.07) 1px, transparent 1px);
+  background-size: 34px 34px;
+}
+
+.scanline {
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.04),
+    rgba(255, 255, 255, 0.04) 1px,
+    transparent 1px,
+    transparent 5px
+  );
+}
+
+.clip-panel {
+  --panel-notch: 14px;
+  clip-path: polygon(0 0, calc(100% - var(--panel-notch)) 0, 100% var(--panel-notch), 100% 100%, var(--panel-notch) 100%, 0 calc(100% - var(--panel-notch)));
+}
+
+@media (min-width: 768px) {
+  .clip-panel {
+    --panel-notch: 18px;
+  }
+}

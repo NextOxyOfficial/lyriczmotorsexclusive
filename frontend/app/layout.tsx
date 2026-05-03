@@ -1,0 +1,77 @@
+import type { Metadata } from 'next'
+import Script from 'next/script'
+
+import CartDrawer from '@/components/CartDrawer'
+import Footer from '@/components/Footer'
+import Header from '@/components/Header'
+import { CartProvider } from '@/lib/cart'
+import './globals.css'
+
+const metaPixelId = process.env.NEXT_PUBLIC_META_PIXEL_ID
+const gaMeasurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID
+const googleAdsId = process.env.NEXT_PUBLIC_GOOGLE_ADS_ID
+
+export const metadata: Metadata = {
+  title: 'Lyricz Motors Exclusive',
+  description: 'Premium bikes, performance spare parts, and service center bookings.',
+}
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en">
+      <body>
+        {metaPixelId ? (
+          <>
+            <Script id="meta-pixel" strategy="afterInteractive">
+              {`
+                !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+                n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+                n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+                t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window, document,'script',
+                'https://connect.facebook.net/en_US/fbevents.js');
+                fbq('init', '${metaPixelId}');
+                fbq('track', 'PageView');
+              `}
+            </Script>
+            <noscript>
+              <img
+                height="1"
+                width="1"
+                style={{ display: 'none' }}
+                src={`https://www.facebook.com/tr?id=${metaPixelId}&ev=PageView&noscript=1`}
+                alt=""
+              />
+            </noscript>
+          </>
+        ) : null}
+
+        {gaMeasurementId || googleAdsId ? (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId || googleAdsId}`}
+              strategy="afterInteractive"
+            />
+            <Script id="google-tags" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                ${gaMeasurementId ? `gtag('config', '${gaMeasurementId}');` : ''}
+                ${googleAdsId ? `gtag('config', '${googleAdsId}');` : ''}
+              `}
+            </Script>
+          </>
+        ) : null}
+
+        <CartProvider>
+          <CartDrawer />
+          <Header />
+          <div className="pt-16">
+            {children}
+          </div>
+          <Footer />
+        </CartProvider>
+      </body>
+    </html>
+  )
+}
