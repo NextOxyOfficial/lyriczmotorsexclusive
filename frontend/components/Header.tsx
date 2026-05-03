@@ -11,6 +11,7 @@ const navItems = [
   { label: 'Bikes', href: '/bikes' },
   { label: 'Spare Parts', href: '/spare-parts' },
   { label: 'Service', href: '/service' },
+  { label: 'Contact', href: '/contact' },
   { label: 'Book', href: '/#book' },
 ]
 
@@ -34,7 +35,8 @@ export default function Header() {
             const active =
               (item.href === '/spare-parts' && pathname === '/spare-parts') ||
               (item.href === '/bikes' && pathname === '/bikes') ||
-              (item.href === '/service' && pathname === '/service')
+              (item.href === '/service' && pathname === '/service') ||
+              (item.href === '/contact' && pathname === '/contact')
             return (
               <Link
                 key={item.href}

@@ -209,8 +209,16 @@ export default function Home() {
     })
   }, [activeType, products, query])
 
-  const featuredProduct = products.find((product) => product.is_featured) || products[0]
+  const featuredProducts = products.filter((p) => p.is_featured)
+  const featuredList = featuredProducts.length ? featuredProducts : products.slice(0, 1)
+  const [slideIndex, setSlideIndex] = useState(0)
   const totalGarageValue = products.reduce((sum, product) => sum + Number(product.price || 0), 0)
+
+  useEffect(() => {
+    if (featuredList.length <= 1) return
+    const timer = setInterval(() => setSlideIndex((i) => (i + 1) % featuredList.length), 3500)
+    return () => clearInterval(timer)
+  }, [featuredList.length])
 
   async function addToCart(product: Product) {
     addItem({
@@ -298,25 +306,49 @@ export default function Home() {
             </div>
           </div>
 
-          {featuredProduct ? (
+          {featuredList.length > 0 ? (
             <div className="mt-6 border border-white/10 bg-black/40 shadow-hud backdrop-blur-md clip-panel sm:mt-0 sm:p-4 lg:mt-0">
+              {/* Slides */}
               <div className="relative overflow-hidden clip-panel">
-                <img src={featuredProduct.image_url} alt={featuredProduct.name} className="h-40 w-full object-cover sm:h-72 lg:h-80" />
+                {featuredList.map((fp, i) => (
+                  <div
+                    key={fp.id}
+                    className={`transition-opacity duration-500 ${i === slideIndex ? 'block opacity-100' : 'hidden opacity-0'}`}
+                  >
+                    <img src={fp.image_url} alt={fp.name} className="h-40 w-full object-cover sm:h-72 lg:h-80" />
+                  </div>
+                ))}
                 <div className="absolute left-3 top-3 border border-boost/50 bg-boost px-2 py-1 text-[10px] font-black uppercase text-asphalt clip-panel">
                   Boss Drop
                 </div>
+                {/* Dot indicators only — arrows hidden */}
               </div>
+              {/* Info */}
               <div className="flex items-start justify-between gap-3 p-1 pt-4">
                 <div className="min-w-0">
-                  <p className="text-[10px] font-black uppercase tracking-[0.2em] text-volt">{featuredProduct.category}</p>
-                  <h2 className="mt-1 truncate text-base font-black uppercase text-white sm:text-2xl">{featuredProduct.name}</h2>
-                  <p className="mt-1 line-clamp-2 text-xs leading-5 text-slate-300 sm:text-sm sm:leading-6">{featuredProduct.short_description}</p>
+                  <p className="text-[10px] font-black uppercase tracking-[0.2em] text-volt">{featuredList[slideIndex].category}</p>
+                  <h2 className="mt-1 truncate text-base font-black uppercase text-white sm:text-2xl">{featuredList[slideIndex].name}</h2>
+                  <p className="mt-1 line-clamp-2 text-xs leading-5 text-slate-300 sm:text-sm sm:leading-6">{featuredList[slideIndex].short_description}</p>
                 </div>
                 <div className="flex-shrink-0 text-right">
                   <p className="text-[10px] uppercase tracking-[0.2em] text-slate-400">Power</p>
-                  <p className="text-3xl font-black text-volt sm:text-4xl">{featuredProduct.power_score}</p>
+                  <p className="text-3xl font-black text-volt sm:text-4xl">{featuredList[slideIndex].power_score}</p>
                 </div>
               </div>
+              {/* Dot indicators */}
+              {featuredList.length > 1 && (
+                <div className="mt-3 flex justify-center gap-1.5 pb-1">
+                  {featuredList.map((_, i) => (
+                    <button
+                      key={i}
+                      type="button"
+                      onClick={() => setSlideIndex(i)}
+                      className={`h-1.5 rounded-full transition-all ${i === slideIndex ? 'w-5 bg-volt' : 'w-1.5 bg-white/20 hover:bg-white/40'}`}
+                      aria-label={`Slide ${i + 1}`}
+                    />
+                  ))}
+                </div>
+              )}
             </div>
           ) : null}
         </div>
