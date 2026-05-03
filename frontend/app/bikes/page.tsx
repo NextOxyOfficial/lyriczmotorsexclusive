@@ -131,6 +131,8 @@ export default function BikesPage() {
     })
   }, [category, bikes, query])
 
+  const [addedIds, setAddedIds] = useState<Set<number>>(new Set())
+
   async function addToCart(bike: Product) {
     addItem({
       id: bike.id,
@@ -139,6 +141,8 @@ export default function BikesPage() {
       price: Number(bike.price),
       image_url: bike.image_url,
     })
+    setAddedIds((prev) => new Set(prev).add(bike.id))
+    setTimeout(() => setAddedIds((prev) => { const next = new Set(prev); next.delete(bike.id); return next }), 2000)
     await trackMarketingEvent('AddToCart', {
       content_name: bike.name,
       content_type: 'bike',
@@ -259,9 +263,9 @@ export default function BikesPage() {
                   <button
                     type="button"
                     onClick={() => addToCart(bike)}
-                    className="inline-flex items-center gap-2 bg-ignition px-4 py-3 text-xs font-black uppercase text-white clip-panel"
+                    className="inline-flex items-center gap-2 bg-ignition px-4 py-3 text-xs font-black uppercase text-white clip-panel active:scale-95 transition-transform"
                   >
-                    <ShoppingCart className="h-4 w-4" /> Add
+                    <ShoppingCart className="h-4 w-4" /> {addedIds.has(bike.id) ? 'Added' : 'Add'}
                   </button>
                 </div>
               </div>

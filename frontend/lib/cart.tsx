@@ -60,7 +60,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       }
       return [...prev, { ...incoming, quantity: 1 }]
     })
-    setDrawerOpen(true)
   }, [])
 
   const removeItem = useCallback((id: number) => {

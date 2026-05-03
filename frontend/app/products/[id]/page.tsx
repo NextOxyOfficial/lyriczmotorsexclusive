@@ -210,7 +210,7 @@ export default function ProductDetailsPage() {
   const [cartAdded, setCartAdded] = useState(false)
   const [bookingOpen, setBookingOpen] = useState(false)
   const [bookingItem, setBookingItem] = useState<BookingItem | null>(null)
-  const { addItem, openDrawer } = useCart()
+  const { addItem } = useCart()
 
   useEffect(() => {
     setCartAdded(false)
@@ -261,7 +261,6 @@ export default function ProductDetailsPage() {
       image_url: product.image_url,
     })
     setCartAdded(true)
-    openDrawer()
     trackMarketingEvent('AddToCart', {
       content_name: product.name,
       content_type: product.product_type,
@@ -370,7 +369,7 @@ function BikeDetailView({
             <button
               type="button"
               onClick={onAddToCart}
-              className={"inline-flex items-center justify-center gap-2 px-5 py-4 text-sm font-black uppercase clip-panel transition " + (cartAdded ? 'border border-volt bg-volt/20 text-volt' : 'bg-ignition text-white hover:bg-ignition/90')}
+              className={"inline-flex items-center justify-center gap-2 px-5 py-4 text-sm font-black uppercase clip-panel transition active:scale-95 " + (cartAdded ? 'border border-volt bg-volt/20 text-volt' : 'bg-ignition text-white hover:bg-ignition/90')}
             >
               {cartAdded ? <><CheckCircle2 className="h-5 w-5" /> Added to Cart</> : <><ShoppingCart className="h-5 w-5" /> Add to Cart</>}
             </button>
@@ -647,7 +646,7 @@ function SparePartDetailView({
                 <button
                   type="button"
                   onClick={onAddToCart}
-                  className={"inline-flex flex-1 items-center justify-center gap-2 px-5 py-4 text-sm font-black uppercase clip-panel transition " + (cartAdded ? 'border border-volt bg-volt/20 text-volt' : 'bg-ignition text-white hover:bg-ignition/90')}
+                  className={"inline-flex flex-1 items-center justify-center gap-2 px-5 py-4 text-sm font-black uppercase clip-panel transition active:scale-95 " + (cartAdded ? 'border border-volt bg-volt/20 text-volt' : 'bg-ignition text-white hover:bg-ignition/90')}
                 >
                   {cartAdded ? <><CheckCircle2 className="h-5 w-5" /> Added to Cart</> : <><ShoppingCart className="h-5 w-5" /> Add to Cart</>}
                 </button>

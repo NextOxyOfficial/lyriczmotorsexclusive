@@ -110,6 +110,8 @@ export default function SparePartsPage() {
     })
   }, [category, parts, query])
 
+  const [addedIds, setAddedIds] = useState<Set<number>>(new Set())
+
   async function addToCart(part: Product) {
     addItem({
       id: part.id,
@@ -118,6 +120,8 @@ export default function SparePartsPage() {
       price: Number(part.price),
       image_url: part.image_url,
     })
+    setAddedIds((prev) => new Set(prev).add(part.id))
+    setTimeout(() => setAddedIds((prev) => { const next = new Set(prev); next.delete(part.id); return next }), 2000)
     await trackMarketingEvent('AddToCart', {
       content_name: part.name,
       content_type: 'spare_part',
@@ -171,8 +175,8 @@ export default function SparePartsPage() {
                     <p className="text-2xl font-black text-volt">{formatMoney(Number(part.price))}</p>
                     {part.compare_at_price ? <p className="text-xs text-slate-500 line-through">{formatMoney(Number(part.compare_at_price))}</p> : null}
                   </div>
-                  <button type="button" onClick={() => addToCart(part)} className="inline-flex items-center gap-2 bg-ignition px-4 py-3 text-xs font-black uppercase text-white clip-panel">
-                    <ShoppingCart className="h-4 w-4" /> Add
+                  <button type="button" onClick={() => addToCart(part)} className="inline-flex items-center gap-2 bg-ignition px-4 py-3 text-xs font-black uppercase text-white clip-panel active:scale-95 transition-transform">
+                    <ShoppingCart className="h-4 w-4" /> {addedIds.has(part.id) ? 'Added' : 'Add'}
                   </button>
                 </div>
               </div>

@@ -171,6 +171,7 @@ export default function Home() {
   const [query, setQuery] = useState('')
   const { count: cartCount, openDrawer, addItem } = useCart()
   const [leadStatus, setLeadStatus] = useState('')
+  const [addedIds, setAddedIds] = useState<Set<number>>(new Set())
 
   useEffect(() => {
     trackMarketingEvent('ViewContent', { section: 'home' })
@@ -219,6 +220,8 @@ export default function Home() {
       price: Number(product.price),
       image_url: product.image_url,
     })
+    setAddedIds((prev) => new Set(prev).add(product.id))
+    setTimeout(() => setAddedIds((prev) => { const next = new Set(prev); next.delete(product.id); return next }), 2000)
     await trackMarketingEvent('AddToCart', {
       content_name: product.name,
       content_type: product.product_type,
@@ -399,8 +402,8 @@ export default function Home() {
                         <p className="text-[10px] text-slate-500 line-through">{formatMoney(Number(product.compare_at_price))}</p>
                       ) : null}
                     </div>
-                    <button type="button" onClick={() => addToCart(product)} className="inline-flex items-center gap-2 bg-ignition px-4 py-2.5 text-xs font-black uppercase text-white clip-panel">
-                      <ShoppingCart className="h-3.5 w-3.5" /> Add
+                    <button type="button" onClick={() => addToCart(product)} className="inline-flex items-center gap-2 bg-ignition px-4 py-2.5 text-xs font-black uppercase text-white clip-panel active:scale-95 transition-transform">
+                      <ShoppingCart className="h-3.5 w-3.5" /> {addedIds.has(product.id) ? 'Added' : 'Add'}
                     </button>
                   </div>
                 </div>
