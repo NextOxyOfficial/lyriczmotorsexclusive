@@ -12,7 +12,7 @@ export default function CartDrawer() {
       {/* Backdrop */}
       {drawerOpen && (
         <div
-          className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm"
+          className="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm"
           onClick={closeDrawer}
           aria-hidden="true"
         />
@@ -20,13 +20,13 @@ export default function CartDrawer() {
 
       {/* Drawer */}
       <aside
-        className={`fixed right-0 top-0 z-50 flex h-full w-full max-w-md flex-col border-l border-white/10 bg-[#0d1117] transition-transform duration-300 ease-in-out ${
+        className={`fixed right-0 top-0 z-[70] flex h-full w-full max-w-md flex-col border-l border-white/10 bg-[#0d1117] transition-transform duration-300 ease-in-out ${
           drawerOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
         aria-label="Shopping cart"
       >
-        {/* Header */}
-        <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
+        {/* Sticky top close bar — always visible on mobile, sits below fixed site header */}
+        <div className="sticky top-0 z-10 flex items-center justify-between border-b border-white/10 bg-[#0d1117] px-5 py-4">
           <div className="flex items-center gap-3">
             <span className="flex h-9 w-9 items-center justify-center border border-volt/30 bg-volt/10 text-volt clip-panel">
               <ShoppingCart className="h-4 w-4" />
@@ -53,6 +53,13 @@ export default function CartDrawer() {
               <ShoppingCart className="h-12 w-12 text-slate-600" />
               <p className="mt-4 text-sm font-black uppercase tracking-[0.2em] text-slate-500">Cart is empty</p>
               <p className="mt-1 text-xs text-slate-600">Add a bike or spare part to start.</p>
+              <button
+                type="button"
+                onClick={closeDrawer}
+                className="mt-8 border border-white/10 px-6 py-3 text-xs font-black uppercase tracking-[0.18em] text-slate-400 clip-panel hover:border-volt/40 hover:text-volt"
+              >
+                ← Continue Shopping
+              </button>
             </div>
           ) : (
             <ul className="space-y-3">

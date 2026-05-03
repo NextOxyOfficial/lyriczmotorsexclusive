@@ -7,9 +7,9 @@ import { CalendarClock, Menu, ShoppingCart, X, Zap } from 'lucide-react'
 import { useCart } from '@/lib/cart'
 
 const navItems = [
-  { label: 'Garage', href: '/#garage' },
+  { label: 'Bikes', href: '/bikes' },
   { label: 'Spare Parts', href: '/spare-parts' },
-  { label: 'Service', href: '/#service' },
+  { label: 'Service', href: '/service' },
   { label: 'Book', href: '/#book' },
 ]
 
@@ -36,7 +36,10 @@ export default function Header() {
         {/* Desktop nav */}
         <nav className="hidden items-center gap-1 md:flex" aria-label="Main navigation">
           {navItems.map((item) => {
-            const active = item.href === '/spare-parts' && pathname === '/spare-parts'
+            const active =
+              (item.href === '/spare-parts' && pathname === '/spare-parts') ||
+              (item.href === '/bikes' && pathname === '/bikes') ||
+              (item.href === '/service' && pathname === '/service')
             return (
               <Link
                 key={item.href}
@@ -62,7 +65,7 @@ export default function Header() {
             <ShoppingCart className="h-4 w-4 text-boost" />
             <span className="font-black">{count}</span>
             {count > 0 && (
-              <span className="absolute -right-1.5 -top-1.5 flex h-4 w-4 items-center justify-center bg-ignition text-[10px] font-black text-white clip-panel">
+              <span className="absolute -right-1.5 -top-1.5 flex h-4 w-4 items-center justify-center bg-ignition text-[10px] font-black text-white rounded-sm">
                 {count}
               </span>
             )}
@@ -86,7 +89,7 @@ export default function Header() {
             <ShoppingCart className="h-4 w-4 text-boost" />
             <span className="text-sm font-black text-white">{count}</span>
             {count > 0 && (
-              <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center bg-ignition text-[10px] font-black text-white clip-panel">
+              <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center bg-ignition text-[10px] font-black text-white rounded-sm">
                 {count}
               </span>
             )}
