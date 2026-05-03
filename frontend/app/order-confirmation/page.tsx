@@ -74,3 +74,15 @@ function OrderConfirmationContent() {
     </div>
   )
 }
+
+export default function OrderConfirmationPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex min-h-[60vh] items-center justify-center bg-asphalt">
+        <div className="h-8 w-8 animate-spin border-2 border-volt border-t-transparent clip-panel" />
+      </div>
+    }>
+      <OrderConfirmationContent />
+    </Suspense>
+  )
+}

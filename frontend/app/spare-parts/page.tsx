@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
-import { ArrowLeft, Gauge, PackageCheck, Search, SlidersHorizontal, Star, Truck, Wrench, Zap } from 'lucide-react'
+import { ArrowLeft, Gauge, PackageCheck, Search, ShoppingCart, SlidersHorizontal, Star, Truck, Wrench, Zap } from 'lucide-react'
 
 import { trackMarketingEvent } from '@/lib/tracking'
 import { useCart } from '@/lib/cart'

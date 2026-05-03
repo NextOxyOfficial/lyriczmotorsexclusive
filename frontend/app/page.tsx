@@ -15,6 +15,7 @@ import {
   ShieldCheck,
   Sparkles,
   Star,
+  ShoppingCart,
   Timer,
   Wrench,
   Zap,
