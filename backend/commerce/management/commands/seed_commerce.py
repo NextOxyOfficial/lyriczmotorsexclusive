@@ -6,6 +6,7 @@ from commerce.models import Product, ServicePackage
 
 
 PRODUCTS = [
+    # ── Bikes ─────────────────────────────────────────────────────────
     {
         'name': 'Shadowblade R9 Hyper Sport',
         'slug': 'shadowblade-r9-hyper-sport',
@@ -18,8 +19,19 @@ PRODUCTS = [
         'image_url': 'https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=1400&q=85',
         'power_score': 96,
         'short_description': 'Track-ready premium sport bike with aggressive street tuning and elite braking setup.',
-        'specs': {'engine': '998cc', 'mode': 'Track / Street', 'stock': '2 units', 'warranty': '2 years'},
+        'specs': {'mode': 'Track / Street', 'stock': '2 units'},
         'is_featured': True,
+        # Bike-specific
+        'engine_cc': 998,
+        'max_power': '189 bhp @ 13500 rpm',
+        'max_torque': '113 Nm @ 11000 rpm',
+        'transmission': '6-speed quick-shift',
+        'fuel_capacity_l': Decimal('17.0'),
+        'seat_height_mm': 825,
+        'weight_kg': 193,
+        'mileage_kmpl': Decimal('14.5'),
+        'abs': True,
+        'color_options': ['Matte Asphalt', 'Racing Red', 'Stealth Black'],
     },
     {
         'name': 'Neon Raider 300 Street Kit',
@@ -33,8 +45,19 @@ PRODUCTS = [
         'image_url': 'https://images.unsplash.com/photo-1558981806-ec527fa84c39?w=1400&q=85',
         'power_score': 88,
         'short_description': 'Urban performance build for fast commutes, weekend rides, and sharp night presence.',
-        'specs': {'engine': '321cc', 'mode': 'City Boost', 'stock': '6 units', 'warranty': '1 year'},
+        'specs': {'mode': 'City Boost', 'stock': '6 units'},
         'is_featured': True,
+        # Bike-specific
+        'engine_cc': 321,
+        'max_power': '42 bhp @ 10750 rpm',
+        'max_torque': '29.6 Nm @ 9000 rpm',
+        'transmission': '6-speed manual',
+        'fuel_capacity_l': Decimal('14.0'),
+        'seat_height_mm': 780,
+        'weight_kg': 167,
+        'mileage_kmpl': Decimal('24.0'),
+        'abs': True,
+        'color_options': ['Neon Lime', 'Midnight Blue', 'Gunmetal Grey'],
     },
     {
         'name': 'Titan Touring GT-X',
@@ -48,9 +71,21 @@ PRODUCTS = [
         'image_url': 'https://images.unsplash.com/photo-1558980664-769d59546b3d?w=1400&q=85',
         'power_score': 91,
         'short_description': 'Long-distance comfort package with loaded luggage support and premium road protection.',
-        'specs': {'engine': '745cc', 'mode': 'Touring', 'stock': 'preorder', 'warranty': '2 years'},
+        'specs': {'mode': 'Touring', 'stock': 'preorder'},
         'is_featured': False,
+        # Bike-specific
+        'engine_cc': 745,
+        'max_power': '77 bhp @ 8750 rpm',
+        'max_torque': '72 Nm @ 6500 rpm',
+        'transmission': '6-speed manual',
+        'fuel_capacity_l': Decimal('21.0'),
+        'seat_height_mm': 800,
+        'weight_kg': 221,
+        'mileage_kmpl': Decimal('20.0'),
+        'abs': True,
+        'color_options': ['Pearl White', 'Graphite Silver', 'Deep Ocean Blue'],
     },
+    # ── Spare Parts ───────────────────────────────────────────────────
     {
         'name': 'Carbon Apex Exhaust System',
         'slug': 'carbon-apex-exhaust-system',
@@ -63,8 +98,14 @@ PRODUCTS = [
         'image_url': 'https://images.unsplash.com/photo-1609630875171-b1321377ee65?w=1400&q=85',
         'power_score': 84,
         'short_description': 'Lightweight carbon exhaust tuned for deeper tone and improved throttle response.',
-        'specs': {'fitment': '250cc-650cc', 'material': 'Carbon fiber', 'install': 'Service center'},
+        'specs': {'weight': '2.1 kg', 'db_reduction': '3 dB', 'power_gain': '+4 bhp'},
         'is_featured': True,
+        # Spare-part-specific
+        'part_number': 'APX-EX-250650',
+        'material': 'Carbon fiber sleeve, stainless steel core',
+        'compatible_bikes': ['Yamaha R3', 'KTM Duke 390', 'Honda CB300R', 'Kawasaki Z400'],
+        'warranty_months': 12,
+        'fitment_note': 'Requires professional fitting at service center. OEM header retained.',
     },
     {
         'name': 'Racing Brake Armor Kit',
@@ -78,8 +119,14 @@ PRODUCTS = [
         'image_url': 'https://images.unsplash.com/photo-1619767886558-efdc259cde1a?w=1400&q=85',
         'power_score': 89,
         'short_description': 'Premium brake upgrade bundle for confident high-speed control and heat resistance.',
-        'specs': {'fitment': 'Sport / Naked', 'includes': 'Pads, lines, rotors', 'install': '90 min'},
+        'specs': {'includes': 'Pads + Lines + Rotors', 'install_time': '90 min', 'temp_rating': '650°C'},
         'is_featured': False,
+        # Spare-part-specific
+        'part_number': 'BRM-BRK-SPORT-KIT',
+        'material': 'Sintered metal pads, braided steel lines, slotted rotors',
+        'compatible_bikes': ['Yamaha MT-09', 'Kawasaki Z650', 'Honda CB650R', 'Suzuki GSX-S750'],
+        'warranty_months': 6,
+        'fitment_note': 'Bleed brakes after installation. Bed-in period: 200 km recommended.',
     },
 ]
 

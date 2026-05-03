@@ -27,6 +27,25 @@ class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    # ── Bike-specific fields ──────────────────────────────────────────
+    engine_cc = models.PositiveSmallIntegerField(null=True, blank=True, help_text='Engine displacement in cc')
+    max_power = models.CharField(max_length=40, blank=True, help_text='e.g. 43 bhp @ 9000 rpm')
+    max_torque = models.CharField(max_length=40, blank=True, help_text='e.g. 44 Nm @ 7000 rpm')
+    transmission = models.CharField(max_length=40, blank=True, help_text='e.g. 6-speed manual')
+    fuel_capacity_l = models.DecimalField(max_digits=5, decimal_places=1, null=True, blank=True)
+    seat_height_mm = models.PositiveSmallIntegerField(null=True, blank=True)
+    weight_kg = models.PositiveSmallIntegerField(null=True, blank=True, help_text='Kerb weight in kg')
+    mileage_kmpl = models.DecimalField(max_digits=5, decimal_places=1, null=True, blank=True)
+    abs = models.BooleanField(null=True, blank=True)
+    color_options = models.JSONField(default=list, blank=True, help_text='List of available color names')
+
+    # ── Spare-part-specific fields ────────────────────────────────────
+    part_number = models.CharField(max_length=80, blank=True)
+    material = models.CharField(max_length=120, blank=True)
+    compatible_bikes = models.JSONField(default=list, blank=True, help_text='List of compatible bike models')
+    warranty_months = models.PositiveSmallIntegerField(null=True, blank=True)
+    fitment_note = models.CharField(max_length=240, blank=True, help_text='Installation note or fitment guide')
+
     class Meta:
         ordering = ['-is_featured', 'name']
 

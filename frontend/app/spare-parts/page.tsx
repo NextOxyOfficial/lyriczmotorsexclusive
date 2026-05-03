@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
-import { ArrowLeft, Gauge, PackageCheck, Search, ShoppingCart, SlidersHorizontal, Star, Truck, Wrench, Zap } from 'lucide-react'
+import { ArrowLeft, Gauge, Search, ShoppingCart, SlidersHorizontal, Star } from 'lucide-react'
 
 import { trackMarketingEvent } from '@/lib/tracking'
 import { useCart } from '@/lib/cart'
@@ -79,7 +79,7 @@ export default function SparePartsPage() {
   const [parts, setParts] = useState<Product[]>(fallbackSpareParts)
   const [query, setQuery] = useState('')
   const [category, setCategory] = useState('All')
-  const { count: cartCount, total: cartTotal, openDrawer, addItem } = useCart()
+  const { addItem } = useCart()
 
   useEffect(() => {
     trackMarketingEvent('ViewContent', { section: 'spare_parts' })
@@ -128,38 +128,7 @@ export default function SparePartsPage() {
 
   return (
     <main className="min-h-screen bg-asphalt text-slate-50">
-      <section className="relative overflow-hidden border-b border-white/10 py-16 sm:py-20">
-        <div className="absolute inset-0 hud-grid opacity-50" />
-        <div className="absolute inset-0 bg-[linear-gradient(110deg,rgba(9,11,16,1),rgba(17,24,39,0.86),rgba(244,63,31,0.22))]" />
-        <div className="relative mx-auto grid max-w-7xl gap-8 px-4 sm:px-6 lg:grid-cols-[1fr_420px] lg:px-8">
-          <div>
-            <p className="inline-flex items-center gap-2 border border-volt/30 bg-volt/10 px-4 py-2 text-xs font-black uppercase tracking-[0.2em] text-volt clip-panel">
-              <Zap className="h-4 w-4" /> Spare Parts Store
-            </p>
-            <h1 className="mt-5 max-w-4xl text-4xl font-black uppercase leading-tight sm:text-5xl lg:text-6xl">
-              Upgrade Parts, Sorted Like A Performance Loadout.
-            </h1>
-            <p className="mt-5 max-w-2xl text-base leading-7 text-slate-300">
-              Browse premium exhaust, brake, drivetrain, and install-ready parts with service-center support built into the buying flow.
-            </p>
-          </div>
-
-          <aside className="border border-white/10 bg-black/35 p-5 shadow-hud clip-panel">
-            <p className="text-xs font-black uppercase tracking-[0.18em] text-slate-500">Cart Console</p>
-            <p className="mt-2 text-3xl font-black text-white">{formatMoney(cartTotal)}</p>
-            <div className="mt-5 grid gap-3 text-sm font-semibold text-slate-300">
-              <span className="flex items-center gap-2"><PackageCheck className="h-4 w-4 text-volt" /> Genuine fitment check</span>
-              <span className="flex items-center gap-2"><Wrench className="h-4 w-4 text-volt" /> Install slot available</span>
-              <span className="flex items-center gap-2"><Truck className="h-4 w-4 text-volt" /> Pickup or delivery flow</span>
-            </div>
-            <a href="/checkout" className="mt-6 inline-flex w-full items-center justify-center gap-2 bg-ignition px-5 py-4 text-sm font-black uppercase text-white clip-panel">
-              Proceed to Checkout
-            </a>
-          </aside>
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+      <section className="mx-auto max-w-7xl px-4 py-5 sm:px-6 lg:px-8">
         <div className="grid gap-4 border border-white/10 bg-white/[0.04] p-4 clip-panel lg:grid-cols-[1fr_auto]">
           <label className="flex items-center gap-3 border border-white/10 bg-black/25 px-4 py-3 clip-panel">
             <Search className="h-5 w-5 text-slate-500" />

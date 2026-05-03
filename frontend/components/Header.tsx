@@ -80,10 +80,11 @@ export default function Header() {
           <button
             type="button"
             onClick={openDrawer}
-            className="relative flex h-10 w-10 items-center justify-center border border-white/10 bg-white/[0.05] text-white"
+            className="relative flex items-center gap-1.5 border border-white/10 bg-white/[0.05] px-3 py-2 text-white md:hidden"
             aria-label="Open cart"
           >
             <ShoppingCart className="h-4 w-4 text-boost" />
+            <span className="text-sm font-black text-white">{count}</span>
             {count > 0 && (
               <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center bg-ignition text-[10px] font-black text-white clip-panel">
                 {count}

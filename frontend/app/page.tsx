@@ -266,7 +266,7 @@ export default function Home() {
     <main className="min-h-screen overflow-hidden bg-asphalt text-slate-50">
 
       {/* ── Hero ── */}
-      <section id="top" className="relative flex min-h-screen flex-col justify-end pb-10 sm:justify-center sm:pb-0">
+      <section id="top" className="relative flex min-h-[calc(100vh-200px)] flex-col justify-start pb-10 sm:pb-0">
         <div className="absolute inset-0">
           <img src="https://images.unsplash.com/photo-1558981403-c5f9899a28bc?w=2200&q=85" alt="Premium sport motorcycle" className="h-full w-full object-cover" />
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(9,11,16,0.55)_0%,rgba(9,11,16,0.97)_100%)] sm:bg-[linear-gradient(90deg,rgba(9,11,16,0.97),rgba(9,11,16,0.75),rgba(9,11,16,0.25))]" />
@@ -274,7 +274,7 @@ export default function Home() {
           <div className="absolute inset-0 scanline opacity-25" />
         </div>
 
-        <div className="relative mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 sm:py-12 lg:grid lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-8 lg:px-8 lg:py-14">
+        <div className="relative mx-auto w-full max-w-7xl px-4 pb-8 pt-16 sm:px-6 sm:pb-12 sm:pt-20 lg:grid lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-8 lg:px-8 lg:pb-14 lg:pt-20">
           <div>
             <div className="mb-4 inline-flex items-center gap-2 border border-volt/30 bg-volt/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.22em] text-volt clip-panel sm:px-4 sm:py-2 sm:text-xs">
               <Cpu className="h-3.5 w-3.5 sm:h-4 sm:w-4" /> Premium Garage Console
@@ -296,7 +296,7 @@ export default function Home() {
           </div>
 
           {featuredProduct ? (
-            <div className="mt-6 border border-white/10 bg-black/40 p-3 shadow-hud backdrop-blur-md clip-panel sm:mt-0 sm:p-4 lg:mt-0">
+            <div className="mt-6 border border-white/10 bg-black/40 shadow-hud backdrop-blur-md clip-panel sm:mt-0 sm:p-4 lg:mt-0">
               <div className="relative overflow-hidden clip-panel">
                 <img src={featuredProduct.image_url} alt={featuredProduct.name} className="h-40 w-full object-cover sm:h-72 lg:h-80" />
                 <div className="absolute left-3 top-3 border border-boost/50 bg-boost px-2 py-1 text-[10px] font-black uppercase text-asphalt clip-panel">
@@ -331,7 +331,7 @@ export default function Home() {
 
       {/* ── Garage ── */}
       <section id="garage" className="bg-asphalt py-12 sm:py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
           <div className="flex flex-col gap-4 sm:gap-6 lg:flex-row lg:items-end lg:justify-between">
             <div>
               <p className="text-[10px] font-black uppercase tracking-[0.24em] text-ignition sm:text-sm">Garage Market</p>
@@ -412,7 +412,7 @@ export default function Home() {
 
       {/* ── Service ── */}
       <section id="service" className="bg-[#f4f7f2] py-12 text-slate-950 sm:py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
           <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-start lg:gap-10">
             <div>
               <p className="text-[10px] font-black uppercase tracking-[0.24em] text-ignition sm:text-sm">Premium Service Center</p>
@@ -458,7 +458,7 @@ export default function Home() {
       {/* ── Book ── */}
       <section id="book" className="relative bg-pitlane py-12 sm:py-20">
         <div className="absolute inset-0 hud-grid opacity-40" />
-        <div className="relative mx-auto grid max-w-7xl gap-5 px-4 sm:gap-8 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:px-8">
+        <div className="relative mx-auto grid max-w-7xl gap-5 px-2 sm:gap-8 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:px-8">
           <div className="border border-white/10 bg-black/35 p-5 clip-panel sm:p-6">
             <p className="text-[10px] font-black uppercase tracking-[0.24em] text-volt sm:text-sm">Rider Request</p>
             <h2 className="mt-1 text-2xl font-black uppercase text-white sm:mt-2 sm:text-4xl">Lock A Deal, Part, Or Service Slot</h2>
