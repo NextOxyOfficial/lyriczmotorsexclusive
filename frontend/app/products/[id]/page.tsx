@@ -26,6 +26,7 @@ import {
 
 import { trackMarketingEvent } from '@/lib/tracking'
 import { useCart } from '@/lib/cart'
+import BookingModal, { type BookingItem } from '@/components/BookingModal'
 
 // -- Type -------------------------------------------------------------------
 type Product = {
@@ -207,6 +208,8 @@ export default function ProductDetailsPage() {
   )
   const [related, setRelated] = useState<Product[]>([])
   const [cartAdded, setCartAdded] = useState(false)
+  const [bookingOpen, setBookingOpen] = useState(false)
+  const [bookingItem, setBookingItem] = useState<BookingItem | null>(null)
   const { addItem, openDrawer } = useCart()
 
   useEffect(() => {
@@ -242,6 +245,12 @@ export default function ProductDetailsPage() {
     loadProduct()
   }, [productId])
 
+  function handleBookNow() {
+    if (!product) return
+    setBookingItem({ name: product.name, product_type: product.product_type })
+    setBookingOpen(true)
+  }
+
   async function handleAddToCart() {
     if (!product) return
     addItem({
@@ -275,9 +284,14 @@ export default function ProductDetailsPage() {
     )
   }
 
-  return product.product_type === 'bike'
-    ? <BikeDetailView product={product} related={related} cartAdded={cartAdded} onAddToCart={handleAddToCart} />
-    : <SparePartDetailView product={product} related={related} cartAdded={cartAdded} onAddToCart={handleAddToCart} />
+  return (
+    <>
+      {product.product_type === 'bike'
+        ? <BikeDetailView product={product} related={related} cartAdded={cartAdded} onAddToCart={handleAddToCart} onBookNow={handleBookNow} />
+        : <SparePartDetailView product={product} related={related} cartAdded={cartAdded} onAddToCart={handleAddToCart} onBookNow={handleBookNow} />}
+      <BookingModal open={bookingOpen} item={bookingItem} onClose={() => setBookingOpen(false)} />
+    </>
+  )
 }
 
 // ===========================================================================
@@ -288,11 +302,13 @@ function BikeDetailView({
   related,
   cartAdded,
   onAddToCart,
+  onBookNow,
 }: {
   product: Product
   related: Product[]
   cartAdded: boolean
   onAddToCart: () => void
+  onBookNow: () => void
 }) {
   const savings = product.compare_at_price ? Number(product.compare_at_price) - Number(product.price) : 0
   const specEntries = Object.entries(product.specs)
@@ -301,7 +317,7 @@ function BikeDetailView({
     <div className="min-h-screen bg-asphalt text-slate-50">
 
       {/* Hero -- full viewport, image behind, content bottom anchored */}
-      <section className="relative flex min-h-[100svh] flex-col justify-end">
+      <section className="relative flex min-h-[600px] flex-col justify-end">
         <div className="absolute inset-0">
           <img src={product.image_url} alt={product.name} className="h-full w-full object-cover" />
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(9,11,16,0.25)_0%,rgba(9,11,16,0.75)_55%,rgba(9,11,16,0.97)_100%)]" />
@@ -309,14 +325,7 @@ function BikeDetailView({
           <div className="absolute inset-0 scanline opacity-20" />
         </div>
 
-        {/* Back -- top left */}
-        <div className="absolute left-4 top-4 sm:left-6 sm:top-6">
-          <Link href="/#garage" className="inline-flex items-center gap-2 border border-white/20 bg-black/50 px-3 py-2 text-[10px] font-black uppercase tracking-[0.18em] text-white backdrop-blur-sm clip-panel hover:border-volt/50 hover:text-volt transition sm:text-xs">
-            <ArrowLeft className="h-3.5 w-3.5" /> Garage
-          </Link>
-        </div>
-
-        {/* Status + featured -- top right */}
+                {/* Status + featured -- top right */}
         <div className="absolute right-4 top-4 sm:right-6 sm:top-6 flex flex-col items-end gap-2">
           <span className={"border px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] clip-panel sm:text-xs " + (STATUS_COLORS[product.status] ?? 'bg-white/10 text-white border-white/20')}>
             {product.status.replace(/_/g, ' ')}
@@ -338,16 +347,6 @@ function BikeDetailView({
               {product.name}
             </h1>
             <p className="mt-3 max-w-xl text-sm leading-6 text-slate-300 sm:text-base sm:leading-7">{product.short_description}</p>
-
-            {/* HUD stat bar */}
-            <div className="mt-5 grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:gap-3">
-              {product.engine_cc ? <HudStat label="Engine" value={product.engine_cc + " cc"} /> : null}
-              {product.max_power ? <HudStat label="Max Power" value={product.max_power} /> : null}
-              {product.transmission ? <HudStat label="Gearbox" value={product.transmission} /> : null}
-              {product.weight_kg ? <HudStat label="Weight" value={product.weight_kg + " kg"} /> : null}
-              {product.mileage_kmpl ? <HudStat label="Mileage" value={product.mileage_kmpl + " km/l"} /> : null}
-              {product.abs !== null && product.abs !== undefined ? <HudStat label="ABS" value={product.abs ? "Yes" : "No"} /> : null}
-            </div>
           </div>
         </div>
       </section>
@@ -375,9 +374,9 @@ function BikeDetailView({
             >
               {cartAdded ? <><CheckCircle2 className="h-5 w-5" /> Added to Cart</> : <><ShoppingCart className="h-5 w-5" /> Add to Cart</>}
             </button>
-            <Link href="/#book" className="inline-flex items-center justify-center gap-2 bg-volt px-5 py-4 text-sm font-black uppercase text-asphalt clip-panel hover:bg-volt/90 transition">
+            <button type="button" onClick={onBookNow} className="inline-flex items-center justify-center gap-2 bg-volt px-5 py-4 text-sm font-black uppercase text-asphalt clip-panel hover:bg-volt/90 transition">
               <Wrench className="h-5 w-5" /> Book Now
-            </Link>
+            </button>
             <a href="tel:+8801700000000" className="inline-flex items-center justify-center gap-2 border border-white/15 bg-white/[0.06] px-5 py-4 text-sm font-black uppercase text-white clip-panel hover:border-volt/30 transition">
               <Phone className="h-4 w-4 text-volt" /> Call Us
             </a>
@@ -512,11 +511,13 @@ function SparePartDetailView({
   related,
   cartAdded,
   onAddToCart,
+  onBookNow,
 }: {
   product: Product
   related: Product[]
   cartAdded: boolean
   onAddToCart: () => void
+  onBookNow: () => void
 }) {
   const savings = product.compare_at_price ? Number(product.compare_at_price) - Number(product.price) : 0
   const specEntries = Object.entries(product.specs)
@@ -650,9 +651,9 @@ function SparePartDetailView({
                 >
                   {cartAdded ? <><CheckCircle2 className="h-5 w-5" /> Added to Cart</> : <><ShoppingCart className="h-5 w-5" /> Add to Cart</>}
                 </button>
-                <Link href="/#book" className="inline-flex flex-1 items-center justify-center gap-2 bg-volt px-5 py-4 text-sm font-black uppercase text-asphalt clip-panel hover:bg-volt/90 transition">
+                <button type="button" onClick={onBookNow} className="inline-flex flex-1 items-center justify-center gap-2 bg-volt px-5 py-4 text-sm font-black uppercase text-asphalt clip-panel hover:bg-volt/90 transition">
                   <Wrench className="h-5 w-5" /> Book Install
-                </Link>
+                </button>
               </div>
 
               <a href="tel:+8801700000000" className="flex items-center gap-3 border border-white/10 bg-white/[0.03] px-4 py-3 clip-panel hover:border-volt/30 transition">

@@ -1,5 +1,6 @@
 import Link from 'next/link'
-import { Facebook, Instagram, MapPin, Phone, Youtube, Zap } from 'lucide-react'
+import { Facebook, Heart, Instagram, MapPin, Phone, Youtube } from 'lucide-react'
+import SiteLogo from '@/components/SiteLogo'
 
 const quickLinks = [
   { label: 'Bikes', href: '/#garage' },
@@ -34,14 +35,8 @@ export default function Footer() {
 
         {/* Brand row */}
         <div className="flex items-center justify-between gap-4">
-          <Link href="/" className="inline-flex items-center gap-3" aria-label="Lyricz Motors home">
-            <span className="flex h-9 w-9 items-center justify-center border border-volt/40 bg-volt/10 text-volt clip-panel">
-              <Zap className="h-4 w-4" />
-            </span>
-            <span>
-              <span className="block text-sm font-black uppercase tracking-[0.28em] text-white">Lyricz</span>
-              <span className="block text-[10px] uppercase tracking-[0.22em] text-volt">Motors Exclusive</span>
-            </span>
+          <Link href="/" aria-label="Lyricz Motors home">
+            <SiteLogo />
           </Link>
           {/* Social icons — visible on all sizes */}
           <div className="flex items-center gap-2">
@@ -90,7 +85,9 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="mt-8 flex flex-col items-center justify-between gap-2 border-t border-white/10 pt-5 text-[11px] sm:flex-row">
           <p>&copy; {new Date().getFullYear()} Lyricz Motors Exclusive. All rights reserved.</p>
-          <p className="text-slate-600">Premium Garage Console &bull; Dhaka, BD</p>
+          <p className="flex items-center gap-1 text-slate-500">
+            Developed with <Heart className="h-3 w-3 fill-red-500 text-red-500" /> by Lyricz Softwares &amp; Technology Limited
+          </p>
         </div>
       </div>
     </footer>

@@ -286,11 +286,11 @@ export default function Home() {
               A performance ecommerce hub for riders who want the machine, the upgrade path, and the premium service bay in one high-intensity buying experience.
             </p>
             <div className="mt-6 grid grid-cols-2 gap-3 sm:flex sm:flex-row">
-              <a href="#garage" className="inline-flex items-center justify-center gap-2 bg-volt px-4 py-3.5 text-xs font-black uppercase text-asphalt clip-panel sm:px-6 sm:py-4 sm:text-sm">
-                <Bike className="h-4 w-4" /> Enter Garage
+              <a href="/bikes" className="inline-flex items-center justify-center gap-2 bg-volt px-4 py-3.5 text-xs font-black uppercase text-asphalt clip-panel sm:px-6 sm:py-4 sm:text-sm">
+                <Bike className="h-4 w-4" /> Browse Bikes
               </a>
-              <a href="#service" className="inline-flex items-center justify-center gap-2 border border-white/15 bg-white/[0.08] px-4 py-3.5 text-xs font-black uppercase text-white clip-panel sm:px-6 sm:py-4 sm:text-sm">
-                <Wrench className="h-4 w-4" /> Service Bay
+              <a href="/service" className="inline-flex items-center justify-center gap-2 border border-white/15 bg-white/[0.08] px-4 py-3.5 text-xs font-black uppercase text-white clip-panel sm:px-6 sm:py-4 sm:text-sm">
+                <Wrench className="h-4 w-4" /> Service Center
               </a>
             </div>
           </div>

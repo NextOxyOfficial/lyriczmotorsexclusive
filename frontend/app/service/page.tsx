@@ -1,7 +1,9 @@
 'use client'
 
+import { useState } from 'react'
 import Link from 'next/link'
 import { CalendarClock, Shield, Star, Wrench, Zap } from 'lucide-react'
+import BookingModal, { type BookingItem } from '@/components/BookingModal'
 
 type TeamMember = {
   id: number
@@ -127,51 +129,53 @@ const statusConfig = {
 }
 
 export default function ServicePage() {
+  const [bookingOpen, setBookingOpen] = useState(false)
+  const [bookingItem, setBookingItem] = useState<BookingItem | null>(null)
+
+  function handleBookService() {
+    setBookingItem({ name: 'Service Booking', product_type: 'service' })
+    setBookingOpen(true)
+  }
+
   return (
+    <>
     <main className="min-h-screen bg-asphalt text-slate-50">
 
       {/* ── Hero ── */}
-      <section className="relative overflow-hidden border-b border-white/10 py-14 sm:py-20">
+      <section className="relative overflow-hidden border-b border-white/10 py-8 sm:py-10">
         <div className="absolute inset-0 hud-grid opacity-40" />
         <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(9,11,16,0.95),rgba(40,242,156,0.06))]" />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <p className="inline-flex items-center gap-2 border border-volt/30 bg-volt/10 px-4 py-2 text-xs font-black uppercase tracking-[0.2em] text-volt clip-panel">
-            <Wrench className="h-4 w-4" /> Service Center
-          </p>
-          <h1 className="mt-5 max-w-3xl text-4xl font-black uppercase leading-tight sm:text-5xl lg:text-6xl">
-            Our Team. Your Machine. Done Right.
-          </h1>
-          <p className="mt-4 max-w-xl text-base leading-7 text-slate-300">
-            Meet the certified technicians behind every service bay. Real expertise, real accountability — every time your bike enters our shop.
-          </p>
-          <Link
-            href="/#book"
-            className="mt-8 inline-flex items-center gap-2 bg-ignition px-6 py-4 text-sm font-black uppercase text-white clip-panel hover:bg-ignition/90 transition"
-          >
-            <CalendarClock className="h-4 w-4" /> Book a Service Slot
-          </Link>
-        </div>
-      </section>
-
-      {/* ── Stats ── */}
-      <section className="border-b border-white/10 bg-pitlane py-5">
-        <div className="mx-auto grid max-w-7xl grid-cols-2 gap-3 px-4 sm:px-6 lg:grid-cols-4 lg:px-8">
-          {[
-            { label: 'Technicians', value: `${team.length}` },
-            { label: 'On Duty Now', value: `${team.filter(m => m.status === 'on_duty').length}` },
-            { label: 'Bikes Serviced', value: `${team.reduce((s, m) => s + m.bikes_serviced, 0).toLocaleString()}+` },
-            { label: 'Service Bays', value: '3' },
-          ].map((stat) => (
-            <div key={stat.label} className="border border-white/10 bg-white/[0.04] px-4 py-4 clip-panel">
-              <p className="text-2xl font-black text-volt">{stat.value}</p>
-              <p className="mt-1 text-xs font-black uppercase tracking-[0.18em] text-slate-400">{stat.label}</p>
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between sm:gap-8">
+            {/* Left: badge + heading */}
+            <div className="flex-1">
+              <p className="inline-flex items-center gap-2 border border-volt/30 bg-volt/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.2em] text-volt clip-panel">
+                <Wrench className="h-3.5 w-3.5" /> Service Center
+              </p>
+              <h1 className="mt-3 text-2xl font-black uppercase leading-tight sm:text-3xl lg:text-4xl">
+                Our Team. Your Machine.<br className="hidden sm:block" /> Done Right.
+              </h1>
             </div>
-          ))}
+
+            {/* Right: description + CTA */}
+            <div className="flex flex-col items-start gap-4 sm:max-w-xs sm:items-end lg:max-w-sm">
+              <p className="text-sm leading-6 text-slate-400 sm:text-right">
+                Meet the certified technicians behind every service bay. Real expertise, real accountability — every time your bike enters our shop.
+              </p>
+              <button
+                type="button"
+                onClick={handleBookService}
+                className="inline-flex items-center gap-2 bg-ignition px-5 py-3 text-xs font-black uppercase text-white clip-panel hover:bg-ignition/90 transition"
+              >
+                <CalendarClock className="h-4 w-4" /> Book a Service Slot
+              </button>
+            </div>
+          </div>
         </div>
       </section>
 
       {/* ── Team Grid ── */}
-      <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+      <section className="mx-auto max-w-7xl px-2 py-12 sm:px-6 lg:px-8">
         <div className="mb-8">
           <p className="text-xs font-black uppercase tracking-[0.24em] text-ignition">The Crew</p>
           <h2 className="mt-2 text-3xl font-black uppercase text-white sm:text-4xl">Service Team</h2>
@@ -187,7 +191,7 @@ export default function ServicePage() {
                   <img
                     src={member.image_url}
                     alt={member.name}
-                    className="h-52 w-full object-cover object-top"
+                    className="h-80 w-full object-contain object-top"
                   />
                   <span className={`absolute right-3 top-3 px-3 py-1 text-[10px] font-black uppercase tracking-wider clip-panel ${s.color}`}>
                     {s.label}
@@ -226,44 +230,100 @@ export default function ServicePage() {
       </section>
 
       {/* ── Service Packages ── */}
-      <section className="border-t border-white/10 bg-pitlane py-12 sm:py-16">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="mb-8">
-            <p className="text-xs font-black uppercase tracking-[0.24em] text-ignition">What We Offer</p>
-            <h2 className="mt-2 text-3xl font-black uppercase text-white sm:text-4xl">Service Packages</h2>
-          </div>
+      <ServicePackagesSection packages={packages} onBookNow={handleBookService} />
 
-          <div className="grid gap-5 sm:grid-cols-3">
-            {packages.map((pkg) => (
-              <div key={pkg.title} className="border border-white/10 bg-white/[0.04] p-5 clip-panel shadow-hud">
-                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-volt">{pkg.tier}</p>
-                <h3 className="mt-1 text-lg font-black uppercase text-white">{pkg.title}</h3>
-                <p className="mt-2 text-2xl font-black text-ignition">৳{pkg.price}</p>
-                <p className="mt-1 text-xs text-slate-500">{pkg.duration}</p>
-                <p className="mt-3 text-sm leading-6 text-slate-300">{pkg.description}</p>
-                <ul className="mt-4 space-y-1.5">
-                  {pkg.perks.map((perk) => (
-                    <li key={perk} className="flex items-center gap-2 text-xs text-slate-300">
-                      <Star className="h-3 w-3 flex-shrink-0 text-volt" />
-                      {perk}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+    </main>
+    <BookingModal open={bookingOpen} item={bookingItem} onClose={() => setBookingOpen(false)} />
+    </>
+  )
+}
+
+// ===========================================================================
+// SERVICE PACKAGES SECTION — tab layout on mobile, grid on desktop
+// ===========================================================================
+function ServicePackagesSection({ packages, onBookNow }: { packages: ServicePackage[]; onBookNow: () => void }) {
+  const [activeTab, setActiveTab] = useState(0)
+  const active = packages[activeTab]
+
+  return (
+    <section className="border-t border-white/10 bg-pitlane py-12 sm:py-16">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mb-8">
+          <p className="text-xs font-black uppercase tracking-[0.24em] text-ignition">What We Offer</p>
+          <h2 className="mt-2 text-3xl font-black uppercase text-white sm:text-4xl">Service Packages</h2>
+        </div>
+
+        {/* ── Mobile: Tab UI ── */}
+        <div className="sm:hidden">
+          {/* Tab strip */}
+          <div className="flex overflow-x-auto scrollbar-none border border-white/10 bg-white/[0.03] clip-panel">
+            {packages.map((pkg, i) => (
+              <button
+                key={pkg.title}
+                type="button"
+                onClick={() => setActiveTab(i)}
+                className={`flex-1 min-w-[80px] px-3 py-3 text-[10px] font-black uppercase tracking-[0.15em] transition border-r last:border-r-0 border-white/10 ${
+                  activeTab === i
+                    ? 'bg-volt text-asphalt'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                {pkg.tier}
+              </button>
             ))}
           </div>
 
-          <div className="mt-10 text-center">
-            <Link
-              href="/#book"
-              className="inline-flex items-center gap-2 bg-volt px-8 py-4 text-sm font-black uppercase text-asphalt clip-panel hover:bg-volt/90 transition"
-            >
-              <CalendarClock className="h-4 w-4" /> Book Your Service Now
-            </Link>
+          {/* Active panel */}
+          <div className="mt-1 border border-white/10 bg-white/[0.04] p-5 clip-panel shadow-hud">
+            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-volt">{active.tier}</p>
+            <h3 className="mt-1 text-lg font-black uppercase text-white">{active.title}</h3>
+            <div className="mt-2 flex items-end gap-2">
+              <p className="text-2xl font-black text-ignition">৳{active.price}</p>
+              <p className="mb-0.5 text-xs text-slate-500">{active.duration}</p>
+            </div>
+            <p className="mt-3 text-sm leading-6 text-slate-300">{active.description}</p>
+            <ul className="mt-4 space-y-2">
+              {active.perks.map((perk) => (
+                <li key={perk} className="flex items-center gap-2 text-xs text-slate-300">
+                  <Star className="h-3 w-3 flex-shrink-0 text-volt" />
+                  {perk}
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
-      </section>
 
-    </main>
+        {/* ── Desktop: 3-column grid ── */}
+        <div className="hidden sm:grid sm:grid-cols-3 gap-5">
+          {packages.map((pkg) => (
+            <div key={pkg.title} className="border border-white/10 bg-white/[0.04] p-5 clip-panel shadow-hud">
+              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-volt">{pkg.tier}</p>
+              <h3 className="mt-1 text-lg font-black uppercase text-white">{pkg.title}</h3>
+              <p className="mt-2 text-2xl font-black text-ignition">৳{pkg.price}</p>
+              <p className="mt-1 text-xs text-slate-500">{pkg.duration}</p>
+              <p className="mt-3 text-sm leading-6 text-slate-300">{pkg.description}</p>
+              <ul className="mt-4 space-y-1.5">
+                {pkg.perks.map((perk) => (
+                  <li key={perk} className="flex items-center gap-2 text-xs text-slate-300">
+                    <Star className="h-3 w-3 flex-shrink-0 text-volt" />
+                    {perk}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-10 text-center">
+          <button
+            type="button"
+            onClick={onBookNow}
+            className="inline-flex items-center gap-2 bg-volt px-8 py-4 text-sm font-black uppercase text-asphalt clip-panel hover:bg-volt/90 transition"
+          >
+            <CalendarClock className="h-4 w-4" /> Book Your Service Now
+          </button>
+        </div>
+      </div>
+    </section>
   )
 }

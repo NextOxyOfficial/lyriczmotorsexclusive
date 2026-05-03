@@ -3,8 +3,9 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { CalendarClock, Menu, ShoppingCart, X, Zap } from 'lucide-react'
+import { CalendarClock, Menu, ShoppingCart, X } from 'lucide-react'
 import { useCart } from '@/lib/cart'
+import SiteLogo from '@/components/SiteLogo'
 
 const navItems = [
   { label: 'Bikes', href: '/bikes' },
@@ -23,14 +24,8 @@ export default function Header() {
     <header className="fixed left-0 right-0 top-0 z-50 border-b border-white/10 bg-asphalt/90 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-3" aria-label="Lyricz Motors Exclusive home">
-          <span className="flex h-10 w-10 items-center justify-center border border-volt/40 bg-volt/10 text-volt clip-panel">
-            <Zap className="h-5 w-5" />
-          </span>
-          <span className="leading-tight">
-            <span className="block text-sm font-black uppercase tracking-[0.28em] text-white">Lyricz</span>
-            <span className="block text-xs uppercase tracking-[0.22em] text-volt">Motors Exclusive</span>
-          </span>
+        <Link href="/" aria-label="Lyricz Motors Exclusive home">
+          <SiteLogo />
         </Link>
 
         {/* Desktop nav */}
@@ -63,12 +58,7 @@ export default function Header() {
             aria-label={`Open cart — ${count} items`}
           >
             <ShoppingCart className="h-4 w-4 text-boost" />
-            <span className="font-black">{count}</span>
-            {count > 0 && (
-              <span className="absolute -right-1.5 -top-1.5 flex h-4 w-4 items-center justify-center bg-ignition text-[10px] font-black text-white rounded-sm">
-                {count}
-              </span>
-            )}
+            <span className={`font-black ${count > 0 ? 'text-ignition' : 'text-slate-300'}`}>{count}</span>
           </button>
           <Link
             href="/#book"
@@ -87,12 +77,7 @@ export default function Header() {
             aria-label="Open cart"
           >
             <ShoppingCart className="h-4 w-4 text-boost" />
-            <span className="text-sm font-black text-white">{count}</span>
-            {count > 0 && (
-              <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center bg-ignition text-[10px] font-black text-white rounded-sm">
-                {count}
-              </span>
-            )}
+            <span className={`text-sm font-black ${count > 0 ? 'text-ignition' : 'text-slate-300'}`}>{count}</span>
           </button>
           <button
             type="button"
