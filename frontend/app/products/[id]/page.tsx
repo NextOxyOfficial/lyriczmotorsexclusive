@@ -328,7 +328,7 @@ export default function ProductDetailsPage() {
                 href="/#book"
                 className="inline-flex flex-1 items-center justify-center gap-2 bg-volt px-5 py-4 text-sm font-black uppercase text-asphalt clip-panel hover:bg-volt/90 transition"
               >
-                <Wrench className="h-5 w-5" /> Request Deal
+                <Wrench className="h-5 w-5" /> Book Now
               </Link>
             </div>
 
