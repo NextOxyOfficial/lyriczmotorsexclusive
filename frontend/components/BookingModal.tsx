@@ -70,7 +70,7 @@ export default function BookingModal({ open, item, onClose }: Props) {
           email: email.trim(),
           intent,
           message: message.trim(),
-          source: item.name,
+          source: item?.name ?? 'booking_modal',
         }),
       })
       if (!res.ok) throw new Error('Submission failed')

@@ -404,16 +404,6 @@ function BikeDetailView({
               {product.name}
             </h1>
             <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-300 sm:text-base sm:leading-7">{product.short_description}</p>
-
-            {/* Quick HUD stat row */}
-            <div className="mt-5 flex flex-wrap gap-2 sm:gap-3">
-              {product.engine_cc ? <HudStat label="Engine" value={product.engine_cc + " cc"} /> : null}
-              {product.max_power ? <HudStat label="Max Power" value={product.max_power} /> : null}
-              {product.transmission ? <HudStat label="Gearbox" value={product.transmission} /> : null}
-              {product.weight_kg ? <HudStat label="Weight" value={product.weight_kg + " kg"} /> : null}
-              {product.mileage_kmpl ? <HudStat label="Mileage" value={product.mileage_kmpl + " km/l"} /> : null}
-              {product.abs !== null && product.abs !== undefined ? <HudStat label="ABS" value={product.abs ? "Yes" : "No"} /> : null}
-            </div>
           </div>
         </div>
       </section>
