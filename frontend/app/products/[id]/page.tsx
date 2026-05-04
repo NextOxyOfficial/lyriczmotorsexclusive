@@ -8,6 +8,7 @@ import {
   Award,
   Check,
   CheckCircle2,
+  ChevronLeft,
   ChevronRight,
   Cpu,
   Fuel,
@@ -54,6 +55,7 @@ type Product = {
   mileage_kmpl?: string | null
   abs?: boolean | null
   color_options?: string[]
+  gallery_images?: string[]
   // Spare-part-specific
   part_number?: string
   material?: string
@@ -311,19 +313,29 @@ function BikeDetailView({
 }) {
   const savings = product.compare_at_price ? Number(product.compare_at_price) - Number(product.price) : 0
   const specEntries = Object.entries(product.specs)
+  const images = [product.image_url, ...(product.gallery_images ?? [])].filter(Boolean)
+  const [slideIdx, setSlideIdx] = useState(0)
+  const goTo = (i: number) => setSlideIdx((i + images.length) % images.length)
 
   return (
     <div className="min-h-screen bg-asphalt text-slate-50">
 
-      {/* ── HERO: full-viewport background image, content anchored at bottom ── */}
-      <section className="relative flex min-h-[100svh] flex-col justify-end">
-        {/* Background image fills entire section */}
-        <div className="absolute inset-0">
-          <img src={product.image_url} alt={product.name} className="h-full w-full object-cover object-center" />
-          {/* Strong dark gradient from top and especially bottom so text is readable */}
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(9,11,16,0.35)_0%,rgba(9,11,16,0.55)_40%,rgba(9,11,16,0.92)_72%,rgba(9,11,16,1)_100%)]" />
-          <div className="absolute inset-0 hud-grid opacity-35" />
-          <div className="absolute inset-0 scanline opacity-20" />
+      {/* ── HERO: image background with slider, content anchored at bottom ── */}
+      <section className="relative flex min-h-[76vh] flex-col justify-end sm:min-h-[82vh]">
+        {/* Background images — stacked, fade between slides */}
+        <div className="absolute inset-0 overflow-hidden">
+          {images.map((src, i) => (
+            <img
+              key={src}
+              src={src}
+              alt={i === 0 ? product.name : `${product.name} view ${i + 1}`}
+              className={"absolute inset-0 h-full w-full object-cover object-center transition-opacity duration-700 " + (i === slideIdx ? 'opacity-100' : 'opacity-0')}
+            />
+          ))}
+          {/* Lighter overlay so the bike image shows through clearly */}
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(9,11,16,0.08)_0%,rgba(9,11,16,0.22)_40%,rgba(9,11,16,0.76)_68%,rgba(9,11,16,0.97)_100%)]" />
+          <div className="absolute inset-0 hud-grid opacity-25" />
+          <div className="absolute inset-0 scanline opacity-15" />
         </div>
 
         {/* Back nav — top left */}
@@ -345,9 +357,46 @@ function BikeDetailView({
           )}
         </div>
 
+        {/* Prev / Next arrows — only when multiple images */}
+        {images.length > 1 && (
+          <>
+            <button
+              type="button"
+              onClick={() => goTo(slideIdx - 1)}
+              className="absolute left-3 top-1/2 z-10 -translate-y-1/2 flex h-10 w-10 items-center justify-center border border-white/20 bg-black/55 text-white backdrop-blur-sm clip-panel hover:border-volt/50 hover:text-volt transition sm:left-5 sm:h-11 sm:w-11"
+              aria-label="Previous image"
+            >
+              <ChevronLeft className="h-5 w-5" />
+            </button>
+            <button
+              type="button"
+              onClick={() => goTo(slideIdx + 1)}
+              className="absolute right-3 top-1/2 z-10 -translate-y-1/2 flex h-10 w-10 items-center justify-center border border-white/20 bg-black/55 text-white backdrop-blur-sm clip-panel hover:border-volt/50 hover:text-volt transition sm:right-5 sm:h-11 sm:w-11"
+              aria-label="Next image"
+            >
+              <ChevronRight className="h-5 w-5" />
+            </button>
+          </>
+        )}
+
         {/* Hero content — anchored bottom */}
         <div className="relative z-10 px-4 pb-8 sm:px-6 sm:pb-12 lg:px-8">
           <div className="mx-auto max-w-7xl">
+            {/* Dot indicators + counter */}
+            {images.length > 1 && (
+              <div className="mb-4 flex items-center gap-2">
+                {images.map((_, i) => (
+                  <button
+                    key={i}
+                    type="button"
+                    onClick={() => goTo(i)}
+                    className={"h-1.5 rounded-full transition-all duration-300 " + (i === slideIdx ? 'w-7 bg-volt' : 'w-1.5 bg-white/40 hover:bg-white/70')}
+                    aria-label={`Go to image ${i + 1}`}
+                  />
+                ))}
+                <span className="ml-1 text-[9px] font-black uppercase tracking-[0.2em] text-white/50">{slideIdx + 1} / {images.length}</span>
+              </div>
+            )}
             <span className="inline-flex items-center gap-1.5 border border-volt/30 bg-volt/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.2em] text-volt clip-panel sm:text-xs">
               <Cpu className="h-3 w-3 sm:h-3.5 sm:w-3.5" /> {product.category}
             </span>

@@ -38,6 +38,7 @@ class Product(models.Model):
     mileage_kmpl = models.DecimalField(max_digits=5, decimal_places=1, null=True, blank=True)
     abs = models.BooleanField(null=True, blank=True)
     color_options = models.JSONField(default=list, blank=True, help_text='List of available color names')
+    gallery_images = models.JSONField(default=list, blank=True, help_text='List of additional image URLs for gallery/slider')
 
     # ── Spare-part-specific fields ────────────────────────────────────
     part_number = models.CharField(max_length=80, blank=True)
