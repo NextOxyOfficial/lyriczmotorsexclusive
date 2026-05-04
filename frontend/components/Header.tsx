@@ -3,17 +3,17 @@
 import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { CalendarClock, Menu, ShoppingCart, X } from 'lucide-react'
+import { CalendarClock, Menu, ShoppingCart, Wrench, Sparkles, Bike, Phone, Settings2, X } from 'lucide-react'
 import { useCart } from '@/lib/cart'
 import SiteLogo from '@/components/SiteLogo'
 import type { SiteSettings } from '@/lib/site-settings'
 
 const navItems = [
-  { label: 'Bikes', href: '/bikes' },
-  { label: 'Spare Parts', href: '/spare-parts' },
-  { label: 'Service', href: '/service' },
-  { label: 'Modification', href: '/modification' },
-  { label: 'Contact', href: '/contact' },
+  { label: 'Bikes', href: '/bikes', icon: Bike },
+  { label: 'Spare Parts', href: '/spare-parts', icon: Settings2 },
+  { label: 'Service', href: '/service', icon: Wrench },
+  { label: 'Modification', href: '/modification', icon: Sparkles },
+  { label: 'Contact', href: '/contact', icon: Phone },
 ]
 
 interface HeaderProps {
@@ -67,10 +67,11 @@ export default function Header({ siteSettings }: HeaderProps) {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`px-4 py-2 text-sm font-bold uppercase tracking-[0.12em] transition ${
+                className={`inline-flex items-center gap-1.5 px-4 py-2 text-sm font-bold uppercase tracking-[0.12em] transition ${
                   active ? 'text-volt' : 'text-slate-300 hover:text-volt'
                 }`}
               >
+                <item.icon className="h-3.5 w-3.5" />
                 {item.label}
               </Link>
             )
@@ -126,8 +127,9 @@ export default function Header({ siteSettings }: HeaderProps) {
               key={item.href}
               href={item.href}
               onClick={() => setMenuOpen(false)}
-              className="block py-3 text-sm font-bold uppercase tracking-[0.12em] text-slate-200 hover:text-volt"
+              className="flex items-center gap-2.5 py-3 text-sm font-bold uppercase tracking-[0.12em] text-slate-200 hover:text-volt"
             >
+              <item.icon className="h-4 w-4 text-slate-500" />
               {item.label}
             </Link>
           ))}
