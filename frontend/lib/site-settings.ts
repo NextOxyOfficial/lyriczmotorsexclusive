@@ -41,7 +41,7 @@ const FALLBACK: SiteSettings = {
 export async function fetchSiteSettings(): Promise<SiteSettings> {
   try {
     const res = await fetch(`${API}/site-settings/`, {
-      next: { revalidate: 3600 },
+      next: { revalidate: 60 },
     })
     if (!res.ok) return FALLBACK
     return await res.json()

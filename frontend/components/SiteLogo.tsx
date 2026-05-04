@@ -42,10 +42,10 @@ export default function SiteLogo({
           </span>
           {showText && (
             <span className="leading-tight">
-              <span className="block text-sm font-black uppercase tracking-[0.28em] text-white">
+              <span className="block text-sm font-black tracking-[0.1em] text-white">
                 {siteName}
               </span>
-              <span className="block text-xs uppercase tracking-[0.22em] text-volt">
+              <span className="block text-xs tracking-[0.14em] text-volt">
                 {tagline}
               </span>
             </span>

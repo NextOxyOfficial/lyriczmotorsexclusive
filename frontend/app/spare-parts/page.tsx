@@ -171,7 +171,7 @@ export default function SparePartsPage() {
           {filteredParts.map((part) => (
             <article key={part.id} className="group border border-white/10 bg-white/[0.04] p-3 shadow-hud transition hover:border-volt/50 clip-panel">
               <Link href={`/products/${part.id}`} className="relative block overflow-hidden clip-panel" aria-label={`View ${part.name} details`}>
-                <img src={part.image_url} alt={part.name} className="h-56 w-full object-cover transition duration-500 group-hover:scale-105" />
+                <img src={part.image_url} alt={part.name} className="h-56 w-full object-contain bg-black/10 transition duration-500 group-hover:scale-105" style={{filter:'brightness(1.08) contrast(1.03)'}} />
                 <span className="absolute left-3 top-3 bg-black/75 px-3 py-1 text-[11px] font-black uppercase text-boost clip-panel">{part.status.replace('_', ' ')}</span>
                 <span className="absolute bottom-3 right-3 inline-flex items-center gap-1 bg-volt px-3 py-1 text-xs font-black text-asphalt clip-panel"><Gauge className="h-3 w-3" /> {part.power_score}</span>
               </Link>

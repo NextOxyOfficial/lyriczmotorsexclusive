@@ -332,8 +332,8 @@ function BikeDetailView({
               className={"absolute inset-0 h-full w-full object-cover object-center transition-opacity duration-700 " + (i === slideIdx ? 'opacity-100' : 'opacity-0')}
             />
           ))}
-          {/* Lighter overlay so the bike image shows through clearly */}
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(9,11,16,0.08)_0%,rgba(9,11,16,0.22)_40%,rgba(9,11,16,0.76)_68%,rgba(9,11,16,0.97)_100%)]" />
+          {/* Overlay — keep top area clear so the bike shows prominently */}
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(9,11,16,0.0)_0%,rgba(9,11,16,0.10)_30%,rgba(9,11,16,0.60)_62%,rgba(9,11,16,0.94)_100%)]" />
           <div className="absolute inset-0 hud-grid opacity-25" />
           <div className="absolute inset-0 scanline opacity-15" />
         </div>
@@ -601,8 +601,8 @@ function SparePartDetailView({
           <div className="grid gap-6 lg:grid-cols-[1fr_380px] lg:gap-8">
 
             {/* Image */}
-            <div className="relative overflow-hidden border border-white/10 bg-black/40 shadow-hud clip-panel">
-              <img src={product.image_url} alt={product.name} className="h-64 w-full object-cover sm:h-80 lg:h-[420px]" />
+            <div className="relative overflow-hidden border border-white/10 bg-black/20 shadow-hud clip-panel">
+              <img src={product.image_url} alt={product.name} className="h-64 w-full object-contain bg-black/10 sm:h-80 lg:h-[420px]" style={{filter:'brightness(1.08) contrast(1.03)'}} />
               <span className={"absolute left-4 top-4 border px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.15em] clip-panel sm:text-xs " + (STATUS_COLORS[product.status] ?? 'bg-white/10 text-white border-white/20')}>
                 {product.status.replace(/_/g, ' ')}
               </span>
