@@ -77,6 +77,7 @@ class Lead(models.Model):
         BUY_PART = 'buy_part', 'Buy Spare Part'
         SERVICE = 'service', 'Book Service'
         FINANCE = 'finance', 'Finance'
+        GENERAL = 'general', 'General Enquiry'
 
     name = models.CharField(max_length=120)
     phone = models.CharField(max_length=40)
