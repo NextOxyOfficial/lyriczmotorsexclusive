@@ -538,48 +538,26 @@ function SparePartDetailView({
       {/* Main product layout */}
       <section className="py-8 sm:py-12">
         <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
-          <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:gap-12">
 
-            {/* Left: Image + compatibility + fitment */}
-            <div className="space-y-5">
-              <div className="relative overflow-hidden border border-white/10 bg-black/40 shadow-hud clip-panel">
-                <img src={product.image_url} alt={product.name} className="h-64 w-full object-cover sm:h-96" />
-                <span className={"absolute left-4 top-4 border px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.15em] clip-panel sm:text-xs " + (STATUS_COLORS[product.status] ?? 'bg-white/10 text-white border-white/20')}>
-                  {product.status.replace(/_/g, ' ')}
+          {/* ── Top: Image + buy panel side by side ── */}
+          <div className="grid gap-6 lg:grid-cols-[1fr_380px] lg:gap-8">
+
+            {/* Image */}
+            <div className="relative overflow-hidden border border-white/10 bg-black/40 shadow-hud clip-panel">
+              <img src={product.image_url} alt={product.name} className="h-64 w-full object-cover sm:h-[420px] lg:h-full lg:min-h-[360px]" />
+              <span className={"absolute left-4 top-4 border px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.15em] clip-panel sm:text-xs " + (STATUS_COLORS[product.status] ?? 'bg-white/10 text-white border-white/20')}>
+                {product.status.replace(/_/g, ' ')}
+              </span>
+              {product.is_featured && (
+                <span className="absolute right-4 top-4 flex items-center gap-1.5 border border-boost/40 bg-boost/10 px-3 py-1.5 text-[10px] font-black uppercase text-boost clip-panel sm:text-xs">
+                  <Award className="h-3 w-3" /> Featured
                 </span>
-                {product.is_featured && (
-                  <span className="absolute right-4 top-4 flex items-center gap-1.5 border border-boost/40 bg-boost/10 px-3 py-1.5 text-[10px] font-black uppercase text-boost clip-panel sm:text-xs">
-                    <Award className="h-3 w-3" /> Featured
-                  </span>
-                )}
-              </div>
-
-              {product.compatible_bikes && product.compatible_bikes.length > 0 && (
-                <div className="border border-volt/20 bg-volt/[0.04] p-5 clip-panel">
-                  <h3 className="mb-3 flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.28em] text-volt sm:text-xs">
-                    <Zap className="h-3.5 w-3.5" /> Compatible Bikes
-                  </h3>
-                  <div className="flex flex-wrap gap-2">
-                    {product.compatible_bikes.map((bike) => (
-                      <span key={bike} className="border border-volt/25 bg-volt/[0.06] px-3 py-1.5 text-xs font-bold text-volt clip-panel">{bike}</span>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {product.fitment_note && (
-                <div className="flex gap-3 border border-boost/20 bg-boost/[0.05] p-4 clip-panel">
-                  <Wrench className="mt-0.5 h-4 w-4 flex-shrink-0 text-boost sm:h-5 sm:w-5" />
-                  <div>
-                    <p className="text-[10px] font-black uppercase tracking-[0.22em] text-boost sm:text-xs">Fitment Note</p>
-                    <p className="mt-1.5 text-sm leading-5 text-slate-300">{product.fitment_note}</p>
-                  </div>
-                </div>
               )}
             </div>
 
-            {/* Right: Info, specs, CTA */}
-            <div className="space-y-5">
+            {/* Buy panel */}
+            <div className="flex flex-col gap-4">
+              {/* Badges */}
               <div className="flex flex-wrap items-center gap-2">
                 <span className="inline-flex items-center gap-1.5 border border-ignition/30 bg-ignition/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-ignition clip-panel sm:text-xs">
                   <Package className="h-3 w-3 sm:h-3.5 sm:w-3.5" /> Spare Part
@@ -587,51 +565,33 @@ function SparePartDetailView({
                 <span className="border border-white/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.15em] text-slate-400 clip-panel sm:text-xs">{product.category}</span>
               </div>
 
+              {/* Title */}
               <div>
                 <p className="text-[10px] font-black uppercase tracking-[0.22em] text-slate-500 sm:text-xs">{product.brand}</p>
-                <h1 className="mt-1 text-2xl font-black uppercase leading-tight text-white sm:text-3xl lg:text-4xl">{product.name}</h1>
-                <p className="mt-3 text-sm leading-6 text-slate-300 sm:leading-7">{product.short_description}</p>
+                <h1 className="mt-1 text-2xl font-black uppercase leading-tight text-white sm:text-3xl">{product.name}</h1>
+                <p className="mt-2 text-sm leading-6 text-slate-300">{product.short_description}</p>
               </div>
 
+              {/* Part number + warranty */}
               <div className="grid grid-cols-2 gap-2">
                 {product.part_number ? (
-                  <div className="border border-white/10 bg-graphite px-4 py-3 clip-panel">
-                    <span className="block text-[9px] font-black uppercase tracking-[0.18em] text-slate-500 sm:text-[10px]">Part Number</span>
-                    <span className="mt-1 block font-mono text-xs font-bold text-white sm:text-sm">{product.part_number}</span>
+                  <div className="border border-white/10 bg-white/[0.04] px-4 py-3 clip-panel">
+                    <span className="block text-[9px] font-black uppercase tracking-[0.18em] text-slate-500">Part No.</span>
+                    <span className="mt-1 block font-mono text-xs font-bold text-white">{product.part_number}</span>
                   </div>
                 ) : null}
                 {product.warranty_months != null ? (
                   <div className="border border-volt/20 bg-volt/[0.05] px-4 py-3 clip-panel">
-                    <span className="block text-[9px] font-black uppercase tracking-[0.18em] text-volt sm:text-[10px]">Warranty</span>
-                    <span className="mt-1 block text-xs font-black text-white sm:text-sm">{product.warranty_months} Months</span>
+                    <span className="block text-[9px] font-black uppercase tracking-[0.18em] text-volt">Warranty</span>
+                    <span className="mt-1 block text-xs font-black text-white">{product.warranty_months} Months</span>
                   </div>
                 ) : null}
               </div>
 
-              {product.material ? (
-                <div className="border border-white/10 bg-graphite px-4 py-3 clip-panel">
-                  <span className="block text-[9px] font-black uppercase tracking-[0.18em] text-slate-500 sm:text-[10px]">Material</span>
-                  <span className="mt-1 block text-sm font-bold text-white">{product.material}</span>
-                </div>
-              ) : null}
-
-              {specEntries.length > 0 && (
-                <div>
-                  <h3 className="mb-3 text-[10px] font-black uppercase tracking-[0.28em] text-slate-500 sm:text-xs">Technical Specs</h3>
-                  <div className="overflow-hidden border border-white/10 clip-panel">
-                    {specEntries.map(([key, value], i) => (
-                      <div key={key} className={"flex items-center justify-between gap-4 px-4 py-3 " + (i % 2 === 0 ? 'bg-graphite' : 'bg-pitlane/70')}>
-                        <span className="text-[10px] font-black uppercase tracking-[0.15em] text-slate-500 shrink-0 sm:text-xs">{key}</span>
-                        <span className="text-right text-sm font-black text-white">{value}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
+              {/* Price */}
               <div className="border border-white/10 bg-white/[0.03] p-4 clip-panel">
-                <p className="text-[10px] font-black uppercase tracking-[0.22em] text-slate-500 sm:text-xs">Price</p>
-                <div className="mt-2 flex flex-wrap items-end gap-3">
+                <p className="text-[10px] font-black uppercase tracking-[0.22em] text-slate-500">Price</p>
+                <div className="mt-1 flex flex-wrap items-end gap-3">
                   <span className="text-4xl font-black text-volt">{formatMoney(Number(product.price))}</span>
                   {product.compare_at_price && (
                     <div className="flex flex-col pb-0.5">
@@ -642,6 +602,7 @@ function SparePartDetailView({
                 </div>
               </div>
 
+              {/* CTAs */}
               <div className="flex flex-col gap-3 sm:flex-row">
                 <button
                   type="button"
@@ -655,28 +616,81 @@ function SparePartDetailView({
                 </button>
               </div>
 
+              {/* Call */}
               <a href="tel:+8801700000000" className="flex items-center gap-3 border border-white/10 bg-white/[0.03] px-4 py-3 clip-panel hover:border-volt/30 transition">
                 <span className="flex h-9 w-9 flex-shrink-0 items-center justify-center border border-volt/30 bg-volt/10 text-volt clip-panel">
                   <Phone className="h-4 w-4" />
                 </span>
                 <div>
-                  <p className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-500 sm:text-xs">Call / WhatsApp</p>
+                  <p className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-500">Call / WhatsApp</p>
                   <p className="text-sm font-black text-white">+880 17XX-XXXXXX</p>
                 </div>
               </a>
-
-              <div className="border border-white/10 bg-graphite p-5 clip-panel">
-                <h3 className="mb-4 text-[10px] font-black uppercase tracking-[0.28em] text-volt sm:text-xs">What is Included</h3>
-                <ul className="space-y-2.5">
-                  {['Fitment guide & install support', 'Quality-checked before dispatch', 'Service center installation available', 'Replacement warranty included'].map((item) => (
-                    <li key={item} className="flex items-start gap-3 text-sm text-slate-300">
-                      <Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-volt" />{item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
             </div>
           </div>
+
+          {/* ── Bottom: Details row ── */}
+          <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+
+            {/* Specs */}
+            {specEntries.length > 0 && (
+              <div className="border border-white/10 bg-white/[0.03] clip-panel">
+                <div className="border-b border-white/10 px-4 py-3">
+                  <h3 className="text-[10px] font-black uppercase tracking-[0.28em] text-slate-400">Technical Specs</h3>
+                </div>
+                {specEntries.map(([key, value], i) => (
+                  <div key={key} className={"flex items-center justify-between gap-4 px-4 py-3 " + (i % 2 === 0 ? 'bg-white/[0.02]' : '')}>
+                    <span className="text-[10px] font-black uppercase tracking-[0.15em] text-slate-500">{key}</span>
+                    <span className="text-right text-sm font-black text-white">{value}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* What's included */}
+            <div className="border border-white/10 bg-white/[0.03] p-5 clip-panel">
+              <h3 className="mb-4 text-[10px] font-black uppercase tracking-[0.28em] text-volt">What's Included</h3>
+              <ul className="space-y-2.5">
+                {['Fitment guide & install support', 'Quality-checked before dispatch', 'Service center installation available', 'Replacement warranty included'].map((item) => (
+                  <li key={item} className="flex items-start gap-3 text-sm text-slate-300">
+                    <Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-volt" />{item}
+                  </li>
+                ))}
+              </ul>
+              {product.material && (
+                <div className="mt-4 border-t border-white/10 pt-4">
+                  <span className="block text-[9px] font-black uppercase tracking-[0.18em] text-slate-500">Material</span>
+                  <span className="mt-1 block text-sm font-bold text-white">{product.material}</span>
+                </div>
+              )}
+            </div>
+
+            {/* Compatible bikes + fitment */}
+            <div className="flex flex-col gap-4 sm:col-span-2 lg:col-span-1">
+              {product.compatible_bikes && product.compatible_bikes.length > 0 && (
+                <div className="border border-volt/20 bg-volt/[0.04] p-5 clip-panel">
+                  <h3 className="mb-3 flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.28em] text-volt">
+                    <Zap className="h-3.5 w-3.5" /> Compatible Bikes
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {product.compatible_bikes.map((bike) => (
+                      <span key={bike} className="border border-volt/25 bg-volt/[0.06] px-3 py-1.5 text-xs font-bold text-volt clip-panel">{bike}</span>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {product.fitment_note && (
+                <div className="flex gap-3 border border-boost/20 bg-boost/[0.05] p-4 clip-panel">
+                  <Wrench className="mt-0.5 h-4 w-4 flex-shrink-0 text-boost" />
+                  <div>
+                    <p className="text-[10px] font-black uppercase tracking-[0.22em] text-boost">Fitment Note</p>
+                    <p className="mt-1.5 text-sm leading-5 text-slate-300">{product.fitment_note}</p>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
         </div>
       </section>
 
