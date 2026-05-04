@@ -5,31 +5,33 @@ import CartDrawer from '@/components/CartDrawer'
 import Footer from '@/components/Footer'
 import Header from '@/components/Header'
 import { CartProvider } from '@/lib/cart'
-import siteConfig from '@/lib/site-config'
+import { fetchSiteSettings } from '@/lib/site-settings'
 import './globals.css'
 
 const metaPixelId = process.env.NEXT_PUBLIC_META_PIXEL_ID
 const gaMeasurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID
 const googleAdsId = process.env.NEXT_PUBLIC_GOOGLE_ADS_ID
 
-export const metadata: Metadata = {
-  title: siteConfig.name,
-  description: 'Premium bikes, performance spare parts, and service center bookings.',
-  icons: {
-    icon: [
-      { url: siteConfig.faviconIco },
-      { url: siteConfig.faviconPng, type: 'image/png' },
-    ],
-    apple: siteConfig.faviconPng,
-    shortcut: siteConfig.faviconIco,
-  },
-  openGraph: {
-    title: siteConfig.name,
-    images: [siteConfig.ogImage],
-  },
+export async function generateMetadata(): Promise<Metadata> {
+  const s = await fetchSiteSettings()
+  const icons: Metadata['icons'] = s.favicon_url
+    ? { icon: s.favicon_url, apple: s.favicon_url, shortcut: s.favicon_url }
+    : undefined
+  return {
+    title: s.site_name,
+    description: s.meta_description,
+    icons,
+    openGraph: {
+      title: s.site_name,
+      description: s.meta_description,
+      images: s.og_image_url ? [s.og_image_url] : [],
+    },
+  }
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const siteSettings = await fetchSiteSettings()
+
   return (
     <html lang="en">
       <body>
@@ -78,11 +80,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
         <CartProvider>
           <CartDrawer />
-          <Header />
+          <Header siteSettings={siteSettings} />
           <div className="pt-16">
             {children}
           </div>
-          <Footer />
+          <Footer siteSettings={siteSettings} />
         </CartProvider>
       </body>
     </html>

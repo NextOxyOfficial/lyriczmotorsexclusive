@@ -157,7 +157,7 @@ export default function BikesPage() {
 
   return (
     <main className="min-h-screen bg-asphalt text-slate-50">
-      <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+      <section className="mx-auto max-w-7xl px-2 py-5 sm:px-6 lg:px-8">
         {/* Search */}
         <div className="flex items-center gap-3 border border-white/10 bg-black/25 px-4 py-3 clip-panel">
           <Search className="h-5 w-5 flex-shrink-0 text-slate-500" />

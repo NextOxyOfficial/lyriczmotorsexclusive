@@ -1,7 +1,66 @@
 from django.contrib import admin
+from django.urls import reverse
 from django.utils.html import format_html
+from django.http import HttpResponseRedirect
 
-from .models import Lead, MarketingEvent, Order, OrderItem, Product, ServicePackage
+from .models import Lead, MarketingEvent, Order, OrderItem, Product, ServicePackage, SiteSettings
+
+
+@admin.register(SiteSettings)
+class SiteSettingsAdmin(admin.ModelAdmin):
+    readonly_fields = ('logo_preview', 'favicon_preview')
+
+    fieldsets = (
+        ('Site Identity', {
+            'fields': ('site_name', 'tagline', 'meta_description')
+        }),
+        ('Logo', {
+            'description': 'Upload a file OR enter an external URL. Uploaded file takes priority.',
+            'fields': ('logo', 'logo_preview', 'logo_url'),
+        }),
+        ('Favicon', {
+            'fields': ('favicon', 'favicon_preview', 'favicon_url'),
+        }),
+        ('OG / Share Image', {
+            'fields': ('og_image', 'og_image_url'),
+        }),
+        ('Contact Information', {
+            'fields': ('phone', 'whatsapp', 'email', 'address'),
+        }),
+        ('Social Media Links', {
+            'fields': ('facebook_url', 'instagram_url', 'youtube_url', 'tiktok_url', 'twitter_url'),
+        }),
+        ('Footer', {
+            'fields': ('copyright_text',),
+        }),
+    )
+
+    def logo_preview(self, obj):
+        url = obj.logo.url if obj.logo else obj.logo_url
+        if url:
+            return format_html('<img src="{}" style="max-height:60px;max-width:200px;object-fit:contain;border-radius:4px;background:#1a1a2e;padding:6px;" />', url)
+        return '—'
+    logo_preview.short_description = 'Logo Preview'
+
+    def favicon_preview(self, obj):
+        url = obj.favicon.url if obj.favicon else obj.favicon_url
+        if url:
+            return format_html('<img src="{}" style="max-height:48px;max-width:48px;object-fit:contain;" />', url)
+        return '—'
+    favicon_preview.short_description = 'Favicon Preview'
+
+    def has_add_permission(self, request):
+        return not SiteSettings.objects.exists()
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+    def changelist_view(self, request, extra_context=None):
+        """Redirect list view directly to the single settings object."""
+        obj, _ = SiteSettings.objects.get_or_create(pk=1)
+        return HttpResponseRedirect(
+            reverse('admin:commerce_sitesettings_change', args=[obj.pk])
+        )
 
 
 @admin.register(Product)

@@ -1,7 +1,7 @@
-from rest_framework import filters, mixins, viewsets
+from rest_framework import filters, generics, mixins, viewsets
 
-from .models import Lead, MarketingEvent, Order, Product, ServicePackage
-from .serializers import LeadSerializer, MarketingEventSerializer, OrderSerializer, ProductSerializer, ServicePackageSerializer
+from .models import Lead, MarketingEvent, Order, Product, ServicePackage, SiteSettings
+from .serializers import LeadSerializer, MarketingEventSerializer, OrderSerializer, ProductSerializer, ServicePackageSerializer, SiteSettingsSerializer
 
 
 class ProductViewSet(viewsets.ReadOnlyModelViewSet):
@@ -35,6 +35,13 @@ class LeadViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
 class OrderViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
+
+
+class SiteSettingsView(generics.RetrieveAPIView):
+    serializer_class = SiteSettingsSerializer
+
+    def get_object(self):
+        return SiteSettings.get_settings()
 
 
 class MarketingEventViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):

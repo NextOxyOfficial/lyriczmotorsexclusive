@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation'
 import { CalendarClock, Menu, ShoppingCart, X } from 'lucide-react'
 import { useCart } from '@/lib/cart'
 import SiteLogo from '@/components/SiteLogo'
+import type { SiteSettings } from '@/lib/site-settings'
 
 const navItems = [
   { label: 'Bikes', href: '/bikes' },
@@ -15,7 +16,11 @@ const navItems = [
   { label: 'Book', href: '/#book' },
 ]
 
-export default function Header() {
+interface HeaderProps {
+  siteSettings?: SiteSettings
+}
+
+export default function Header({ siteSettings }: HeaderProps) {
   const { count, openDrawer } = useCart()
   const [menuOpen, setMenuOpen] = useState(false)
   const pathname = usePathname()
@@ -25,8 +30,12 @@ export default function Header() {
     <header className="fixed left-0 right-0 top-0 z-50 border-b border-white/10 bg-asphalt/90 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Logo */}
-        <Link href="/" aria-label="Lyricz Motors Exclusive home">
-          <SiteLogo />
+        <Link href="/" aria-label={`${siteSettings?.site_name ?? 'Lyricz Motors Exclusive'} home`}>
+          <SiteLogo
+            siteName={siteSettings?.site_name}
+            tagline={siteSettings?.tagline}
+            logoUrl={siteSettings?.logo_url || undefined}
+          />
         </Link>
 
         {/* Desktop nav */}

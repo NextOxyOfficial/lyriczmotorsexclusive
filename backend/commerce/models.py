@@ -1,6 +1,56 @@
 from django.db import models
 
 
+class SiteSettings(models.Model):
+    """Singleton model — only one row (pk=1) ever exists."""
+    site_name = models.CharField(max_length=120, default='Lyricz Motors Exclusive')
+    tagline = models.CharField(max_length=240, blank=True, default='Ride the Future')
+    meta_description = models.CharField(max_length=400, blank=True, default='Premium bikes, performance spare parts, and service center bookings.')
+
+    # Logo
+    logo = models.ImageField(upload_to='site/', null=True, blank=True)
+    logo_url = models.URLField(max_length=600, blank=True, help_text='External logo URL — used if no file uploaded')
+
+    # Favicon
+    favicon = models.ImageField(upload_to='site/', null=True, blank=True)
+    favicon_url = models.URLField(max_length=600, blank=True, help_text='External favicon URL — used if no file uploaded')
+
+    # OG Image
+    og_image = models.ImageField(upload_to='site/', null=True, blank=True)
+    og_image_url = models.URLField(max_length=600, blank=True)
+
+    # Contact
+    phone = models.CharField(max_length=40, blank=True, default='+880 17XX-XXXXXX')
+    whatsapp = models.CharField(max_length=40, blank=True, help_text='WhatsApp number (digits only, with country code)')
+    email = models.EmailField(blank=True)
+    address = models.CharField(max_length=240, blank=True, default='Dhaka, Bangladesh')
+
+    # Social media
+    facebook_url = models.URLField(max_length=400, blank=True)
+    instagram_url = models.URLField(max_length=400, blank=True)
+    youtube_url = models.URLField(max_length=400, blank=True)
+    tiktok_url = models.URLField(max_length=400, blank=True)
+    twitter_url = models.URLField(max_length=400, blank=True)
+
+    copyright_text = models.CharField(max_length=200, blank=True)
+
+    class Meta:
+        verbose_name = 'Site Settings'
+        verbose_name_plural = 'Site Settings'
+
+    def __str__(self):
+        return self.site_name
+
+    def save(self, *args, **kwargs):
+        self.pk = 1
+        super().save(*args, **kwargs)
+
+    @classmethod
+    def get_settings(cls):
+        obj, _ = cls.objects.get_or_create(pk=1)
+        return obj
+
+
 class Product(models.Model):
     class ProductType(models.TextChoices):
         BIKE = 'bike', 'Bike'

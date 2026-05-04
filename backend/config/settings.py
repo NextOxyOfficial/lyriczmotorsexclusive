@@ -36,6 +36,7 @@ ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -172,3 +173,95 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 # Static files
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+# ── Jazzmin Admin Theme ───────────────────────────────────────────────────────
+JAZZMIN_SETTINGS = {
+    "site_title": "Lyricz Motors Admin",
+    "site_header": "Lyricz Motors",
+    "site_brand": "Lyricz Motors",
+    "site_logo": None,
+    "login_logo": None,
+    "welcome_sign": "Welcome to Lyricz Motors Admin Panel",
+    "copyright": "Lyricz Motors Exclusive",
+    "search_model": ["commerce.Product", "commerce.Lead", "commerce.Order"],
+    "user_avatar": None,
+    "topmenu_links": [
+        {"name": "Site", "url": "/", "new_window": True},
+        {"name": "API", "url": "/api/", "new_window": True},
+        {"model": "auth.User"},
+    ],
+    "usermenu_links": [
+        {"name": "View Site", "url": "/", "new_window": True},
+    ],
+    "show_sidebar": True,
+    "navigation_expanded": True,
+    "hide_apps": [],
+    "hide_models": [],
+    "order_with_respect_to": [
+        "commerce",
+        "commerce.SiteSettings",
+        "commerce.Product",
+        "commerce.ServicePackage",
+        "commerce.Lead",
+        "commerce.Order",
+        "commerce.MarketingEvent",
+        "auth",
+    ],
+    "icons": {
+        "auth": "fas fa-users-cog",
+        "auth.user": "fas fa-user",
+        "auth.Group": "fas fa-users",
+        "commerce.SiteSettings": "fas fa-sliders-h",
+        "commerce.Product": "fas fa-motorcycle",
+        "commerce.ServicePackage": "fas fa-tools",
+        "commerce.Lead": "fas fa-bullseye",
+        "commerce.Order": "fas fa-shopping-bag",
+        "commerce.MarketingEvent": "fas fa-chart-line",
+    },
+    "default_icon_parents": "fas fa-chevron-circle-right",
+    "default_icon_children": "fas fa-circle",
+    "related_modal_active": True,
+    "custom_css": None,
+    "custom_js": None,
+    "use_google_fonts_cdn": True,
+    "show_ui_builder": False,
+    "changeform_format": "horizontal_tabs",
+    "changeform_format_overrides": {
+        "commerce.sitesettings": "collapsible",
+        "commerce.product": "horizontal_tabs",
+    },
+    "language_chooser": False,
+}
+
+JAZZMIN_UI_TWEAKS = {
+    "navbar_small_text": False,
+    "footer_small_text": False,
+    "body_small_text": False,
+    "brand_small_text": False,
+    "brand_colour": "navbar-danger",
+    "accent": "accent-danger",
+    "navbar": "navbar-dark",
+    "no_navbar_border": True,
+    "navbar_fixed": True,
+    "layout_boxed": False,
+    "footer_fixed": False,
+    "sidebar_fixed": True,
+    "sidebar": "sidebar-dark-danger",
+    "sidebar_nav_small_text": False,
+    "sidebar_disable_expand": False,
+    "sidebar_nav_child_indent": True,
+    "sidebar_nav_compact_style": False,
+    "sidebar_nav_legacy_style": False,
+    "sidebar_nav_flat_style": False,
+    "theme": "darkly",
+    "dark_mode_theme": "darkly",
+    "button_classes": {
+        "primary": "btn-primary",
+        "secondary": "btn-secondary",
+        "info": "btn-info",
+        "warning": "btn-warning",
+        "danger": "btn-danger",
+        "success": "btn-success",
+    },
+}
+

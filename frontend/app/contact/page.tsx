@@ -110,7 +110,7 @@ export default function ContactPage() {
       </section>
 
       {/* ── Main ── */}
-      <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-2 py-5 sm:px-6 lg:px-8">
         <div className="grid gap-8 lg:grid-cols-[1fr_2fr]">
 
           {/* ── Left: Info + Socials ── */}
