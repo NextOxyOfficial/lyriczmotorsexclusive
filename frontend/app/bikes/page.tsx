@@ -193,7 +193,7 @@ export default function BikesPage() {
           {filteredBikes.map((bike) => (
             <article
               key={bike.id}
-              className="group border border-white/10 bg-white/[0.04] p-3 shadow-hud transition hover:border-volt/50 clip-panel"
+              className="group border border-white/10 bg-white/[0.04] shadow-hud transition hover:border-volt/50 clip-panel"
             >
               <Link href={`/products/${bike.id}`} className="relative block overflow-hidden clip-panel" aria-label={`View ${bike.name}`}>
                 <img

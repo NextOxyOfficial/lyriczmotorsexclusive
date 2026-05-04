@@ -7,6 +7,7 @@ const quickLinks = [
   { label: 'Bikes', href: '/bikes' },
   { label: 'Spare Parts', href: '/spare-parts' },
   { label: 'Service', href: '/service' },
+  { label: 'Modification', href: '/modification' },
   { label: 'Contact', href: '/contact' },
   { label: 'Book a Slot', href: '/#book' },
 ]
@@ -47,7 +48,7 @@ export default function Footer({ siteSettings }: FooterProps) {
       </div>
 
       {/* ── Main content ── */}
-      <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-12 lg:px-8">
+      <div className="mx-auto max-w-7xl px-2 py-10 sm:px-6 sm:py-12 lg:px-8">
 
         {/* Brand row */}
         <div className="flex items-center justify-between gap-4">
@@ -101,6 +102,29 @@ export default function Footer({ siteSettings }: FooterProps) {
             <Phone className="h-4 w-4 text-volt" /> {phone}
           </a>
         </div>
+
+        {/* Google Maps embed */}
+        {siteSettings?.map_lat && siteSettings?.map_lng && (
+          <div className="mt-7 overflow-hidden border border-white/10 clip-panel">
+            <iframe
+              src={`https://maps.google.com/maps?q=${siteSettings.map_lat},${siteSettings.map_lng}&z=17&output=embed`}
+              width="100%"
+              height="220"
+              style={{ border: 0 }}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title="Lyricz Motors location"
+            />
+            <a
+              href={`https://www.google.com/maps?q=${siteSettings.map_lat},${siteSettings.map_lng}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-2 border-t border-white/10 bg-white/[0.04] py-3 text-xs font-black uppercase tracking-[0.16em] text-slate-300 transition hover:bg-white/[0.08] hover:text-volt"
+            >
+              <MapPin className="h-3.5 w-3.5" /> Open in Google Maps
+            </a>
+          </div>
+        )}
 
         {/* Bottom bar */}
         <div className="mt-8 flex flex-col items-center justify-between gap-2 border-t border-white/10 pt-5 text-[11px] sm:flex-row">

@@ -94,7 +94,7 @@ export default function ContactBody({ settings }: ContactBodyProps) {
       <section className="relative overflow-hidden border-b border-white/10 py-5 sm:py-8">
         <div className="absolute inset-0 hud-grid opacity-40" />
         <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(9,11,16,0.95),rgba(244,63,31,0.06))]" />
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="relative mx-auto max-w-7xl px-1 sm:px-6 lg:px-8">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-8">
             <div className="flex-1">
               <p className="inline-flex items-center gap-2 border border-ignition/30 bg-ignition/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-ignition clip-panel">
@@ -120,7 +120,7 @@ export default function ContactBody({ settings }: ContactBodyProps) {
       </section>
 
       {/* ── Main ── */}
-      <div className="mx-auto max-w-7xl px-3 py-4 sm:px-6 sm:py-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-1 py-4 sm:px-6 sm:py-6 lg:px-8">
         <div className="grid gap-5 lg:grid-cols-[1fr_2fr]">
 
           {/* ── Left: Info + Socials ── */}

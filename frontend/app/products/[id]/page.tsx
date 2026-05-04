@@ -443,7 +443,7 @@ function BikeDetailView({
 
       {/* Full Specs */}
       <section className="bg-asphalt py-12 sm:py-16">
-        <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl px-1 sm:px-6 lg:px-8">
           <div className="grid gap-8 lg:grid-cols-[1fr_380px] lg:gap-10">
 
             {/* Left: Engine + key bike stats */}
@@ -595,7 +595,7 @@ function SparePartDetailView({
 
       {/* Main product layout */}
       <section className="py-8 sm:py-12">
-        <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl px-1 sm:px-6 lg:px-8">
 
           {/* ── Top: Image + buy panel side by side ── */}
           <div className="grid gap-6 lg:grid-cols-[1fr_380px] lg:gap-8">
@@ -773,7 +773,7 @@ function RelatedSection({ related, backLink, backLabel }: { related: Product[]; 
   if (related.length === 0) return null
   return (
     <section className="border-t border-white/10 bg-pitlane/40 py-12 sm:py-16">
-      <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-1 sm:px-6 lg:px-8">
         <div className="mb-6 flex items-center justify-between gap-4 sm:mb-8">
           <h2 className="text-xl font-black uppercase text-white sm:text-3xl">Related Products</h2>
           <Link href={backLink} className="inline-flex items-center gap-1.5 text-[10px] font-black uppercase tracking-[0.2em] text-volt hover:text-volt/80 transition sm:text-xs">

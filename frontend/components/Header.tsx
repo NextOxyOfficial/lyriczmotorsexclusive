@@ -12,6 +12,7 @@ const navItems = [
   { label: 'Bikes', href: '/bikes' },
   { label: 'Spare Parts', href: '/spare-parts' },
   { label: 'Service', href: '/service' },
+  { label: 'Modification', href: '/modification' },
   { label: 'Contact', href: '/contact' },
   { label: 'Book', href: '/#book' },
 ]
@@ -45,6 +46,7 @@ export default function Header({ siteSettings }: HeaderProps) {
               (item.href === '/spare-parts' && pathname === '/spare-parts') ||
               (item.href === '/bikes' && pathname === '/bikes') ||
               (item.href === '/service' && pathname === '/service') ||
+              (item.href === '/modification' && pathname === '/modification') ||
               (item.href === '/contact' && pathname === '/contact')
             return (
               <Link
@@ -101,6 +103,15 @@ export default function Header({ siteSettings }: HeaderProps) {
         </div>
       </div>
 
+      {/* Backdrop — tap outside to close */}
+      {menuOpen && (
+        <div
+          className="fixed inset-0 z-[-1] md:hidden"
+          aria-hidden="true"
+          onClick={() => setMenuOpen(false)}
+        />
+      )}
+
       {/* Mobile drawer */}
       {menuOpen && (
         <nav className="border-t border-white/10 bg-asphalt px-4 py-4 md:hidden" aria-label="Mobile navigation">
@@ -119,7 +130,7 @@ export default function Header({ siteSettings }: HeaderProps) {
             onClick={() => setMenuOpen(false)}
             className="mt-3 inline-flex w-full items-center justify-center gap-2 bg-ignition py-3 text-sm font-black uppercase text-white clip-panel"
           >
-            <CalendarClock className="h-4 w-4" /> Book a Slot
+            <CalendarClock className="h-4 w-4" /> Book a Service
           </Link>
         </nav>
       )}

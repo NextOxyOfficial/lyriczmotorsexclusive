@@ -2,7 +2,7 @@ from decimal import Decimal
 
 from django.core.management.base import BaseCommand
 
-from commerce.models import Product, ServicePackage
+from commerce.models import ModificationGallery, ModificationService, Product, ServicePackage
 
 
 PRODUCTS = [
@@ -130,6 +130,108 @@ PRODUCTS = [
     },
 ]
 
+MODIFICATION_SERVICES = [
+    {
+        'title': 'Full Vinyl Wrap',
+        'tag': 'Most Popular',
+        'price_display': '18,000+',
+        'duration': '1–2 days',
+        'description': 'Complete bike wrap in any design — matte, gloss, chrome, or custom print. Reversible and UV-protected.',
+        'perks': ['50+ colour options', 'UV & scratch protection', 'Fully reversible', 'Includes clear coat'],
+        'accent_color': 'volt',
+        'sort_order': 1,
+    },
+    {
+        'title': 'Custom Paint Job',
+        'tag': 'Premium',
+        'price_display': '25,000+',
+        'duration': '3–5 days',
+        'description': 'Hand-painted custom graphics with professional prep, primer, and lacquer finish. One-of-a-kind result.',
+        'perks': ['Full colour matching', 'Airbrushed designs', 'Ceramic top coat', '2-year warranty'],
+        'accent_color': 'ignition',
+        'sort_order': 2,
+    },
+    {
+        'title': 'Performance Exhaust Upgrade',
+        'tag': '',
+        'price_display': '8,500+',
+        'duration': 'Half day',
+        'description': 'Upgrade to a slip-on or full exhaust system for a deeper tone, weight reduction, and power gain.',
+        'perks': ['Titanium / carbon options', '+3–6 bhp gain', 'Sound tuning', 'Dyno check available'],
+        'accent_color': 'boost',
+        'sort_order': 3,
+    },
+    {
+        'title': 'LED & Lighting Overhaul',
+        'tag': '',
+        'price_display': '5,000+',
+        'duration': '4–6 hours',
+        'description': 'Full LED conversion including headlight, tail light, turn signals, and optional underglow strip kit.',
+        'perks': ['Legal turn signals', 'Projector lens upgrade', 'Custom underglow', 'Plug & play harness'],
+        'accent_color': 'volt',
+        'sort_order': 4,
+    },
+    {
+        'title': 'Suspension Setup & Upgrade',
+        'tag': '',
+        'price_display': '12,000+',
+        'duration': '1 day',
+        'description': 'Respring, revalve, or upgrade forks and rear shock for your riding style and weight.',
+        'perks': ['Sag & preload setting', 'Rebound tuning', 'Track or street setup', 'Test ride included'],
+        'accent_color': 'boost',
+        'sort_order': 5,
+    },
+    {
+        'title': 'Full Modification Package',
+        'tag': 'Best Value',
+        'price_display': '55,000+',
+        'duration': '7–10 days',
+        'description': 'End-to-end transformation: wrap, paint, exhaust, lighting, suspension, and full detail. Your bike, reimagined.',
+        'perks': ['All 5 services included', 'Priority workshop slot', 'Photoshoot on delivery', 'Lifetime support'],
+        'accent_color': 'ignition',
+        'sort_order': 6,
+    },
+]
+
+MODIFICATION_GALLERY = [
+    {
+        'label': 'Neon Raider Full Wrap — Matte Black',
+        'media_type': 'image',
+        'image_url': 'https://images.unsplash.com/photo-1558981806-ec527fa84c39?w=800&q=80',
+        'sort_order': 1,
+    },
+    {
+        'label': 'Custom Red Flame Paint Job',
+        'media_type': 'image',
+        'image_url': 'https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=800&q=80',
+        'sort_order': 2,
+    },
+    {
+        'label': 'LED Lighting Transformation',
+        'media_type': 'image',
+        'image_url': 'https://images.unsplash.com/photo-1609630875171-b1321377ee65?w=800&q=80',
+        'sort_order': 3,
+    },
+    {
+        'label': 'Exhaust Upgrade — Carbon Slip-On',
+        'media_type': 'image',
+        'image_url': 'https://images.unsplash.com/photo-1558980664-769d59546b3d?w=800&q=80',
+        'sort_order': 4,
+    },
+    {
+        'label': 'Track-Prepped Superbike',
+        'media_type': 'image',
+        'image_url': 'https://images.unsplash.com/photo-1558981852-426c349c0b5a?w=800&q=80',
+        'sort_order': 5,
+    },
+    {
+        'label': 'Full Modification Showcase Reel',
+        'media_type': 'video',
+        'video_url': 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+        'sort_order': 6,
+    },
+]
+
 SERVICES = [
     {
         'title': 'Pit Boss Premium Tune',
@@ -173,5 +275,11 @@ class Command(BaseCommand):
 
         for service_data in SERVICES:
             ServicePackage.objects.update_or_create(slug=service_data['slug'], defaults=service_data)
+
+        for mod_service in MODIFICATION_SERVICES:
+            ModificationService.objects.update_or_create(title=mod_service['title'], defaults=mod_service)
+
+        for gallery_item in MODIFICATION_GALLERY:
+            ModificationGallery.objects.update_or_create(label=gallery_item['label'], defaults=gallery_item)
 
         self.stdout.write(self.style.SUCCESS('Commerce catalog seeded successfully.'))

@@ -53,6 +53,24 @@ type ServicePackage = {
 
 const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000/api'
 
+type HeroSettings = {
+  hero_media_type: 'image' | 'video'
+  hero_image_url: string
+  hero_video_url: string
+}
+
+const FALLBACK_HERO: HeroSettings = {
+  hero_media_type: 'image',
+  hero_image_url: 'https://images.unsplash.com/photo-1558981403-c5f9899a28bc?w=2200&q=85',
+  hero_video_url: '',
+}
+
+function toYouTubeEmbed(url: string): string {
+  const id = url.match(/(?:[?&]v=|youtu\.be\/|embed\/)([^?&\s]+)/)?.[1]
+  if (!id) return url
+  return `https://www.youtube.com/embed/${id}?autoplay=1&mute=1&loop=1&playlist=${id}&controls=0&playsinline=1&rel=0&disablekb=1`
+}
+
 const fallbackProducts: Product[] = [
   {
     id: 1,
@@ -167,6 +185,8 @@ const fallbackServices: ServicePackage[] = [
 export default function Home() {
   const [products, setProducts] = useState<Product[]>(fallbackProducts)
   const [services, setServices] = useState<ServicePackage[]>(fallbackServices)
+  const [heroSettings, setHeroSettings] = useState<HeroSettings>(FALLBACK_HERO)
+  const [selectedSvcIdx, setSelectedSvcIdx] = useState(0)
   const [activeType, setActiveType] = useState<'all' | 'bike' | 'spare_part'>('all')
   const [query, setQuery] = useState('')
   const { count: cartCount, openDrawer, addItem } = useCart()
@@ -178,9 +198,10 @@ export default function Home() {
 
     async function loadCommerce() {
       try {
-        const [productResponse, serviceResponse] = await Promise.all([
+        const [productResponse, serviceResponse, settingsResponse] = await Promise.all([
           fetch(`${apiBaseUrl}/products/?page_size=50`, { cache: 'no-store' }),
           fetch(`${apiBaseUrl}/services/?page_size=50`, { cache: 'no-store' }),
+          fetch(`${apiBaseUrl}/site-settings/`, { cache: 'no-store' }),
         ])
 
         if (productResponse.ok) {
@@ -190,7 +211,19 @@ export default function Home() {
 
         if (serviceResponse.ok) {
           const data = await serviceResponse.json()
-          setServices(Array.isArray(data.results) ? data.results : data)
+          const svcs = Array.isArray(data.results) ? data.results : data
+          setServices(svcs)
+          const featIdx = svcs.findIndex((s: ServicePackage) => s.is_featured)
+          if (featIdx >= 0) setSelectedSvcIdx(featIdx)
+        }
+
+        if (settingsResponse.ok) {
+          const data = await settingsResponse.json()
+          setHeroSettings({
+            hero_media_type: data.hero_media_type || 'image',
+            hero_image_url: data.hero_image_url || FALLBACK_HERO.hero_image_url,
+            hero_video_url: data.hero_video_url || '',
+          })
         }
       } catch {
         setProducts(fallbackProducts)
@@ -278,14 +311,30 @@ export default function Home() {
 
       {/* ── Hero ── */}
       <section id="top" className="relative flex min-h-[calc(100vh-200px)] flex-col justify-start pb-10 sm:pb-0">
-        <div className="absolute inset-0">
-          <img src="https://images.unsplash.com/photo-1558981403-c5f9899a28bc?w=2200&q=85" alt="Premium sport motorcycle" className="h-full w-full object-cover" />
+        <div className="absolute inset-0 overflow-hidden">
+          {heroSettings.hero_media_type === 'video' && heroSettings.hero_video_url ? (
+            <>
+              <iframe
+                src={toYouTubeEmbed(heroSettings.hero_video_url)}
+                className="pointer-events-none absolute inset-0 h-full w-full scale-[1.15]"
+                style={{ border: 0 }}
+                allow="autoplay; encrypted-media"
+                title="Hero background"
+              />
+            </>
+          ) : (
+            <img
+              src={heroSettings.hero_image_url}
+              alt="Premium sport motorcycle"
+              className="h-full w-full object-cover"
+            />
+          )}
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(9,11,16,0.55)_0%,rgba(9,11,16,0.97)_100%)] sm:bg-[linear-gradient(90deg,rgba(9,11,16,0.97),rgba(9,11,16,0.75),rgba(9,11,16,0.25))]" />
           <div className="absolute inset-0 hud-grid opacity-60" />
           <div className="absolute inset-0 scanline opacity-25" />
         </div>
 
-        <div className="relative mx-auto w-full max-w-7xl px-2 pb-8 pt-16 sm:px-6 sm:pb-12 sm:pt-20 lg:grid lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-8 lg:px-8 lg:pb-14 lg:pt-20">
+        <div className="relative mx-auto w-full max-w-7xl px-2 pb-4 pt-12 sm:px-6 sm:pb-12 sm:pt-20 lg:grid lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-8 lg:px-8 lg:pb-14 lg:pt-20">
           <div>
             <div className="mb-4 inline-flex items-center gap-2 border border-volt/30 bg-volt/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.22em] text-volt clip-panel sm:px-4 sm:py-2 sm:text-xs">
               <Cpu className="h-3.5 w-3.5 sm:h-4 sm:w-4" /> Premium Garage Console
@@ -296,12 +345,18 @@ export default function Home() {
             <p className="mt-4 max-w-lg text-sm leading-6 text-slate-300 sm:text-base sm:leading-7">
               A performance ecommerce hub for riders who want the machine, the upgrade path, and the premium service bay in one high-intensity buying experience.
             </p>
-            <div className="mt-6 grid grid-cols-2 gap-3 sm:flex sm:flex-row">
+            <div className="mt-6 grid grid-cols-2 gap-3 sm:flex sm:flex-wrap sm:flex-row">
               <a href="/bikes" className="inline-flex items-center justify-center gap-2 bg-volt px-4 py-3.5 text-xs font-black uppercase text-asphalt clip-panel sm:px-6 sm:py-4 sm:text-sm">
                 <Bike className="h-4 w-4" /> Browse Bikes
               </a>
-              <a href="/service" className="inline-flex items-center justify-center gap-2 border border-white/15 bg-white/[0.08] px-4 py-3.5 text-xs font-black uppercase text-white clip-panel sm:px-6 sm:py-4 sm:text-sm">
+              <a href="/spare-parts" className="inline-flex items-center justify-center gap-2 border border-white/25 bg-white/[0.15] px-4 py-3.5 text-xs font-black uppercase text-white clip-panel hover:bg-white/20 transition sm:px-6 sm:py-4 sm:text-sm">
+                <Sparkles className="h-4 w-4" /> Spare Parts
+              </a>
+              <a href="/service" className="inline-flex items-center justify-center gap-2 border border-white/25 bg-white/[0.15] px-4 py-3.5 text-xs font-black uppercase text-white clip-panel hover:bg-white/20 transition sm:px-6 sm:py-4 sm:text-sm">
                 <Wrench className="h-4 w-4" /> Service Center
+              </a>
+              <a href="/modification" className="inline-flex items-center justify-center gap-2 border border-boost/50 bg-boost/20 px-4 py-3.5 text-xs font-black uppercase text-boost clip-panel hover:bg-boost/30 transition sm:px-6 sm:py-4 sm:text-sm">
+                <Zap className="h-4 w-4" /> Modification Center
               </a>
             </div>
           </div>
@@ -356,7 +411,7 @@ export default function Home() {
 
       {/* ── Stats strip ── */}
       <section className="border-y border-white/10 bg-pitlane py-3 sm:py-5">
-        <div className="mx-auto grid max-w-7xl grid-cols-2 gap-2 px-4 sm:gap-3 sm:px-6 lg:grid-cols-4 lg:px-8">
+        <div className="mx-auto grid max-w-7xl grid-cols-2 gap-2 px-2 sm:gap-3 sm:px-6 lg:grid-cols-4 lg:px-8">
           <Stat icon={<Gauge className="h-4 w-4 sm:h-5 sm:w-5" />} label="Catalog Value" value={formatMoney(totalGarageValue)} />
           <Stat icon={<PackageCheck className="h-4 w-4 sm:h-5 sm:w-5" />} label="Live Drops" value={`${products.length} Units`} />
           <Stat icon={<ShieldCheck className="h-4 w-4 sm:h-5 sm:w-5" />} label="Service Tiers" value={`${services.length} Bays`} />
@@ -366,7 +421,7 @@ export default function Home() {
 
       {/* ── Garage ── */}
       <section id="garage" className="bg-asphalt py-12 sm:py-20">
-        <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl px-1 sm:px-6 lg:px-8">
           <div className="flex flex-col gap-4 sm:gap-6 lg:flex-row lg:items-end lg:justify-between">
             <div>
               <p className="text-[10px] font-black uppercase tracking-[0.24em] text-ignition sm:text-sm">Garage Market</p>
@@ -442,12 +497,38 @@ export default function Home() {
               </article>
             ))}
           </div>
+
+          {/* See All */}
+          {activeType === 'all' && (
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+              <Link href="/bikes" className="inline-flex items-center gap-2 border border-volt/50 bg-volt/15 px-8 py-3.5 text-sm font-black uppercase text-volt clip-panel hover:bg-volt/25 transition">
+                <Bike className="h-4 w-4" /> See All Bikes
+              </Link>
+              <Link href="/spare-parts" className="inline-flex items-center gap-2 border border-white/20 bg-white/[0.06] px-8 py-3.5 text-sm font-black uppercase text-slate-200 clip-panel hover:border-volt/30 hover:text-volt transition">
+                <Sparkles className="h-4 w-4" /> See All Spare Parts
+              </Link>
+            </div>
+          )}
+          {activeType === 'bike' && (
+            <div className="mt-8 text-center">
+              <Link href="/bikes" className="inline-flex items-center gap-2 border border-volt/50 bg-volt/15 px-8 py-3.5 text-sm font-black uppercase text-volt clip-panel hover:bg-volt/25 transition">
+                <Bike className="h-4 w-4" /> See All Bikes
+              </Link>
+            </div>
+          )}
+          {activeType === 'spare_part' && (
+            <div className="mt-8 text-center">
+              <Link href="/spare-parts" className="inline-flex items-center gap-2 border border-volt/50 bg-volt/15 px-8 py-3.5 text-sm font-black uppercase text-volt clip-panel hover:bg-volt/25 transition">
+                <Sparkles className="h-4 w-4" /> See All Spare Parts
+              </Link>
+            </div>
+          )}
         </div>
       </section>
 
       {/* ── Service ── */}
       <section id="service" className="bg-[#f4f7f2] py-12 text-slate-950 sm:py-20">
-        <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl px-1 sm:px-6 lg:px-8">
           <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-start lg:gap-10">
             <div>
               <p className="text-[10px] font-black uppercase tracking-[0.24em] text-ignition sm:text-sm">Premium Service Center</p>
@@ -466,8 +547,50 @@ export default function Home() {
             </div>
 
             <div className="grid gap-4 sm:grid-cols-3">
+              {/* Mobile: tab selector + single active card */}
+              <div className="col-span-full sm:hidden">
+                <div className="flex gap-2 justify-center overflow-x-auto pb-2" style={{ scrollbarWidth: 'none' }}>
+                  {services.map((service, i) => (
+                    <button
+                      key={service.id}
+                      type="button"
+                      onClick={() => setSelectedSvcIdx(i)}
+                      className={`flex-shrink-0 px-4 py-2.5 text-[10px] font-black uppercase tracking-[0.14em] clip-panel transition ${
+                        selectedSvcIdx === i
+                          ? 'bg-ignition text-white shadow-hud'
+                          : 'border border-slate-200 bg-white text-slate-600'
+                      }`}
+                    >
+                      {service.tier}
+                    </button>
+                  ))}
+                </div>
+                {services[selectedSvcIdx] && (() => {
+                  const service = services[selectedSvcIdx]
+                  return (
+                    <article key={service.id} className={`mt-3 border p-4 clip-panel ${service.is_featured ? 'border-ignition bg-slate-950 text-white shadow-hud' : 'border-slate-200 bg-white text-slate-950'}`}>
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="text-[10px] font-black uppercase tracking-[0.18em] text-ignition">{service.tier}</span>
+                        <Timer className="h-4 w-4" />
+                      </div>
+                      <h3 className="mt-3 text-lg font-black uppercase leading-tight">{service.title}</h3>
+                      <p className={`mt-2 text-xs leading-5 ${service.is_featured ? 'text-slate-300' : 'text-slate-600'}`}>{service.description}</p>
+                      <p className="mt-4 text-2xl font-black">{formatMoney(Number(service.price))}</p>
+                      <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500">{service.duration}</p>
+                      <div className="mt-4 space-y-1.5">
+                        {service.perks.map((perk) => (
+                          <p key={perk} className="flex items-center gap-2 text-xs font-semibold">
+                            <Sparkles className="h-3.5 w-3.5 flex-shrink-0 text-boost" /> {perk}
+                          </p>
+                        ))}
+                      </div>
+                    </article>
+                  )
+                })()}
+              </div>
+              {/* Desktop: all 3 cards */}
               {services.map((service) => (
-                <article key={service.id} className={`border p-4 clip-panel sm:p-5 ${service.is_featured ? 'border-ignition bg-slate-950 text-white shadow-hud' : 'border-slate-200 bg-white text-slate-950'}`}>
+                <article key={service.id} className={`hidden sm:block border p-4 clip-panel sm:p-5 ${service.is_featured ? 'border-ignition bg-slate-950 text-white shadow-hud' : 'border-slate-200 bg-white text-slate-950'}`}>
                   <div className="flex items-center justify-between gap-2">
                     <span className="text-[10px] font-black uppercase tracking-[0.18em] text-ignition sm:text-xs">{service.tier}</span>
                     <Timer className="h-4 w-4" />
@@ -493,7 +616,7 @@ export default function Home() {
       {/* ── Book ── */}
       <section id="book" className="relative bg-pitlane py-12 sm:py-20">
         <div className="absolute inset-0 hud-grid opacity-40" />
-        <div className="relative mx-auto grid max-w-7xl gap-5 px-2 sm:gap-8 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:px-8">
+        <div className="relative mx-auto grid max-w-7xl gap-5 px-1 sm:gap-8 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:px-8">
           <div className="border border-white/10 bg-black/35 p-5 clip-panel sm:p-6">
             <p className="text-[10px] font-black uppercase tracking-[0.24em] text-volt sm:text-sm">Rider Request</p>
             <h2 className="mt-1 text-2xl font-black uppercase text-white sm:mt-2 sm:text-4xl">Lock A Deal, Part, Or Service Slot</h2>
@@ -508,7 +631,7 @@ export default function Home() {
             </div>
           </div>
 
-          <form onSubmit={submitLead} className="border border-white/10 bg-white/[0.05] p-5 shadow-hud clip-panel">
+          <form onSubmit={submitLead} className="border border-white/10 bg-white/[0.05] p-3 shadow-hud clip-panel">
             <div className="grid gap-3 sm:grid-cols-2 sm:gap-4">
               <Field label="Name" name="name" placeholder="Your name" required />
               <Field label="Phone" name="phone" placeholder="01XXXXXXXXX" required />

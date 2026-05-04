@@ -17,6 +17,17 @@ export interface SiteSettings {
   tiktok_url: string
   twitter_url: string
   copyright_text: string
+  hero_media_type: 'image' | 'video'
+  hero_image_url: string
+  hero_video_url: string
+  service_hero_media_type: 'image' | 'video'
+  service_hero_image_url: string
+  service_hero_video_url: string
+  modification_hero_media_type: 'image' | 'video'
+  modification_hero_image_url: string
+  modification_hero_video_url: string
+  map_lat: string | null
+  map_lng: string | null
 }
 
 const FALLBACK: SiteSettings = {
@@ -36,6 +47,17 @@ const FALLBACK: SiteSettings = {
   tiktok_url: '',
   twitter_url: '',
   copyright_text: '',
+  hero_media_type: 'image',
+  hero_image_url: 'https://images.unsplash.com/photo-1558981403-c5f9899a28bc?w=2200&q=85',
+  hero_video_url: '',
+  service_hero_media_type: 'image',
+  service_hero_image_url: 'https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?w=2000&q=85',
+  service_hero_video_url: '',
+  modification_hero_media_type: 'image',
+  modification_hero_image_url: 'https://images.unsplash.com/photo-1609630875171-b1321377ee65?w=2000&q=85',
+  modification_hero_video_url: '',
+  map_lat: null,
+  map_lng: null,
 }
 
 export async function fetchSiteSettings(): Promise<SiteSettings> {

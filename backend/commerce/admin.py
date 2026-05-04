@@ -3,7 +3,7 @@ from django.urls import reverse
 from django.utils.html import format_html
 from django.http import HttpResponseRedirect
 
-from .models import Lead, MarketingEvent, Order, OrderItem, Product, ServicePackage, SiteSettings
+from .models import Lead, MarketingEvent, ModificationGallery, ModificationService, Order, OrderItem, Product, ServicePackage, SiteSettings
 
 
 @admin.register(SiteSettings)
@@ -32,6 +32,22 @@ class SiteSettingsAdmin(admin.ModelAdmin):
         }),
         ('Footer', {
             'fields': ('copyright_text',),
+        }),
+        ('Homepage Hero', {
+            'description': 'Controls the hero background on the homepage.',
+            'fields': ('hero_media_type', 'hero_image_url', 'hero_video_url'),
+        }),
+        ('Service Page Hero', {
+            'description': 'Controls the hero background on the /service page.',
+            'fields': ('service_hero_media_type', 'service_hero_image_url', 'service_hero_video_url'),
+        }),
+        ('Modification Page Hero', {
+            'description': 'Controls the hero background on the /modification page.',
+            'fields': ('modification_hero_media_type', 'modification_hero_image_url', 'modification_hero_video_url'),
+        }),
+        ('Map Location', {
+            'description': 'Paste the latitude and longitude from Google Maps to show the exact shop location in the footer.',
+            'fields': ('map_lat', 'map_lng'),
         }),
     )
 
@@ -142,3 +158,39 @@ class OrderAdmin(admin.ModelAdmin):
     list_filter = ('status', 'payment_method', 'delivery_method')
     search_fields = ('order_number', 'customer_name', 'customer_phone', 'customer_email')
     inlines = [OrderItemInline]
+
+
+@admin.register(ModificationService)
+class ModificationServiceAdmin(admin.ModelAdmin):
+    list_display = ('title', 'tag', 'price_display', 'duration', 'accent_color', 'sort_order', 'is_active')
+    list_editable = ('sort_order', 'is_active')
+    list_filter = ('is_active', 'accent_color')
+    search_fields = ('title', 'description')
+
+
+@admin.register(ModificationGallery)
+class ModificationGalleryAdmin(admin.ModelAdmin):
+    list_display = ('label', 'media_type', 'sort_order', 'is_active', 'gallery_preview')
+    list_editable = ('sort_order', 'is_active')
+    list_filter = ('media_type', 'is_active')
+    readonly_fields = ('gallery_preview',)
+
+    fieldsets = (
+        ('Info', {'fields': ('label', 'media_type', 'sort_order', 'is_active')}),
+        ('Image', {
+            'description': 'Upload a file OR provide an external URL.',
+            'fields': ('image', 'gallery_preview', 'image_url'),
+        }),
+        ('Video', {
+            'fields': ('video_url',),
+        }),
+    )
+
+    def gallery_preview(self, obj):
+        url = obj.image.url if obj.image else obj.image_url
+        if obj.media_type == 'image' and url:
+            return format_html('<img src="{}" style="max-height:80px;max-width:160px;object-fit:cover;border-radius:4px;" />', url)
+        if obj.media_type == 'video' and obj.video_url:
+            return format_html('<a href="{}" target="_blank">▶ Preview Video</a>', obj.video_url)
+        return '—'
+    gallery_preview.short_description = 'Preview'
