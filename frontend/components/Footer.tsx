@@ -112,9 +112,9 @@ export default function Footer({ siteSettings }: FooterProps) {
         </nav>
 
         {/* Contact block — single border */}
-        <div className="mt-7 border border-white/10 bg-white/[0.03]">
+        <div className="mt-7 border border-white/10 bg-white/[0.03] sm:flex sm:divide-x sm:divide-white/10">
           {/* Phone row */}
-          <div className="flex items-center justify-between gap-3 px-4 py-3">
+          <div className="flex flex-1 items-center justify-between gap-3 px-4 py-3">
             <div>
               <p className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-500">Call &amp; WhatsApp</p>
               <p className="mt-0.5 text-sm font-bold text-slate-200">{phone}</p>
@@ -130,7 +130,7 @@ export default function Footer({ siteSettings }: FooterProps) {
           </div>
 
           {/* Email row */}
-          <div className="flex items-center justify-between gap-3 px-4 py-3">
+          <div className="flex flex-1 items-center justify-between gap-3 px-4 py-3">
             <div>
               <p className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-500">Support Email</p>
               <p className="mt-0.5 text-sm font-bold text-slate-200">support@lyriczmotors.com</p>
@@ -141,7 +141,7 @@ export default function Footer({ siteSettings }: FooterProps) {
           </div>
 
           {/* Address row */}
-          <div className="flex items-center justify-between gap-3 px-4 py-3">
+          <div className="flex flex-1 items-center justify-between gap-3 px-4 py-3">
             <div>
               <p className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-500">Address</p>
               <p className="mt-0.5 text-sm font-bold text-slate-200">{address}</p>

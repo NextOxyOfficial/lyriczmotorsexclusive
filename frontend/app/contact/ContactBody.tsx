@@ -28,7 +28,7 @@ export default function ContactBody({ settings }: ContactBodyProps) {
 
   const phone = settings.phone || '+880 17XX-XXXXXX'
   const whatsapp = settings.whatsapp || settings.phone || ''
-  const email = settings.email || ''
+  const email = settings.email || 'support@lyriczmotors.com'
   const address = settings.address || 'Dhaka, Bangladesh'
 
   const contactInfo = [

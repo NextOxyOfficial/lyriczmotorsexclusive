@@ -33,8 +33,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const siteSettings = await fetchSiteSettings()
 
   return (
-    <html lang="en">
-      <body>
+    <html lang="en" suppressHydrationWarning>
+      <body suppressHydrationWarning>
         {metaPixelId ? (
           <>
             <Script id="meta-pixel" strategy="afterInteractive">
