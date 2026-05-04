@@ -315,17 +315,26 @@ function BikeDetailView({
   return (
     <div className="min-h-screen bg-asphalt text-slate-50">
 
-      {/* Hero -- full viewport, image behind, content bottom anchored */}
-      <section className="relative flex min-h-[600px] flex-col justify-end">
+      {/* ── HERO: full-viewport background image, content anchored at bottom ── */}
+      <section className="relative flex min-h-[100svh] flex-col justify-end">
+        {/* Background image fills entire section */}
         <div className="absolute inset-0">
-          <img src={product.image_url} alt={product.name} className="h-full w-full object-cover" />
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(9,11,16,0.25)_0%,rgba(9,11,16,0.75)_55%,rgba(9,11,16,0.97)_100%)]" />
-          <div className="absolute inset-0 hud-grid opacity-40" />
+          <img src={product.image_url} alt={product.name} className="h-full w-full object-cover object-center" />
+          {/* Strong dark gradient from top and especially bottom so text is readable */}
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(9,11,16,0.35)_0%,rgba(9,11,16,0.55)_40%,rgba(9,11,16,0.92)_72%,rgba(9,11,16,1)_100%)]" />
+          <div className="absolute inset-0 hud-grid opacity-35" />
           <div className="absolute inset-0 scanline opacity-20" />
         </div>
 
-                {/* Status + featured -- top right */}
-        <div className="absolute right-4 top-4 sm:right-6 sm:top-6 flex flex-col items-end gap-2">
+        {/* Back nav — top left */}
+        <div className="absolute left-4 top-4 z-10 sm:left-6 sm:top-6">
+          <Link href="/#garage" className="inline-flex items-center gap-2 border border-white/20 bg-black/50 px-3 py-2 text-[10px] font-black uppercase tracking-[0.18em] text-white backdrop-blur-sm clip-panel hover:border-volt/50 hover:text-volt transition sm:text-xs">
+            <ArrowLeft className="h-3.5 w-3.5" /> Garage
+          </Link>
+        </div>
+
+        {/* Status + featured — top right */}
+        <div className="absolute right-4 top-4 z-10 flex flex-col items-end gap-2 sm:right-6 sm:top-6">
           <span className={"border px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] clip-panel sm:text-xs " + (STATUS_COLORS[product.status] ?? 'bg-white/10 text-white border-white/20')}>
             {product.status.replace(/_/g, ' ')}
           </span>
@@ -336,22 +345,32 @@ function BikeDetailView({
           )}
         </div>
 
-        {/* Hero content -- bottom */}
-        <div className="relative px-4 pb-6 sm:px-6 sm:pb-10 lg:px-8">
+        {/* Hero content — anchored bottom */}
+        <div className="relative z-10 px-4 pb-8 sm:px-6 sm:pb-12 lg:px-8">
           <div className="mx-auto max-w-7xl">
             <span className="inline-flex items-center gap-1.5 border border-volt/30 bg-volt/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.2em] text-volt clip-panel sm:text-xs">
               <Cpu className="h-3 w-3 sm:h-3.5 sm:w-3.5" /> {product.category}
             </span>
-            <h1 className="mt-3 text-[2.1rem] font-black uppercase leading-[1.03] text-white sm:text-5xl lg:text-7xl">
+            <h1 className="mt-3 max-w-4xl text-[2.2rem] font-black uppercase leading-[1.04] text-white sm:text-5xl lg:text-7xl">
               {product.name}
             </h1>
-            <p className="mt-3 max-w-xl text-sm leading-6 text-slate-300 sm:text-base sm:leading-7">{product.short_description}</p>
+            <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-300 sm:text-base sm:leading-7">{product.short_description}</p>
+
+            {/* Quick HUD stat row */}
+            <div className="mt-5 flex flex-wrap gap-2 sm:gap-3">
+              {product.engine_cc ? <HudStat label="Engine" value={product.engine_cc + " cc"} /> : null}
+              {product.max_power ? <HudStat label="Max Power" value={product.max_power} /> : null}
+              {product.transmission ? <HudStat label="Gearbox" value={product.transmission} /> : null}
+              {product.weight_kg ? <HudStat label="Weight" value={product.weight_kg + " kg"} /> : null}
+              {product.mileage_kmpl ? <HudStat label="Mileage" value={product.mileage_kmpl + " km/l"} /> : null}
+              {product.abs !== null && product.abs !== undefined ? <HudStat label="ABS" value={product.abs ? "Yes" : "No"} /> : null}
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Price + CTA strip */}
-      <section className="border-y border-white/10 bg-pitlane">
+      {/* ── Price + CTA strip — immediately below hero ── */}
+      <section className="border-b border-white/10 bg-pitlane">
         <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-6 sm:py-6 lg:px-8">
           <div>
             <p className="text-[10px] font-black uppercase tracking-[0.22em] text-slate-500 sm:text-xs">Selling Price</p>
@@ -544,7 +563,7 @@ function SparePartDetailView({
 
             {/* Image */}
             <div className="relative overflow-hidden border border-white/10 bg-black/40 shadow-hud clip-panel">
-              <img src={product.image_url} alt={product.name} className="h-64 w-full object-cover sm:h-[420px] lg:h-full lg:min-h-[360px]" />
+              <img src={product.image_url} alt={product.name} className="h-64 w-full object-cover sm:h-80 lg:h-[420px]" />
               <span className={"absolute left-4 top-4 border px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.15em] clip-panel sm:text-xs " + (STATUS_COLORS[product.status] ?? 'bg-white/10 text-white border-white/20')}>
                 {product.status.replace(/_/g, ' ')}
               </span>
