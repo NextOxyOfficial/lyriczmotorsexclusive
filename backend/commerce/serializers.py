@@ -10,6 +10,14 @@ class ProductSerializer(serializers.ModelSerializer):
         model = Product
         fields = '__all__'
 
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        request = self.context.get('request')
+        if instance.image:
+            url = instance.image.url
+            data['image_url'] = request.build_absolute_uri(url) if request else url
+        return data
+
 
 class ServicePackageSerializer(serializers.ModelSerializer):
     class Meta:
