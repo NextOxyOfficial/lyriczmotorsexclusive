@@ -55,15 +55,15 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Quick links — horizontal scroll on mobile, grid on desktop */}
+        {/* Quick links — wrapping grid */}
         <nav className="mt-7">
           <p className="mb-3 text-[10px] font-black uppercase tracking-[0.3em] text-slate-600">Quick Links</p>
-          <div className="flex gap-2 overflow-x-auto pb-1 sm:flex-wrap sm:overflow-visible">
+          <div className="flex flex-wrap gap-2">
             {quickLinks.map(({ label, href }) => (
               <Link
                 key={label}
                 href={href}
-                className="flex-shrink-0 border border-white/10 bg-white/[0.03] px-4 py-2 text-xs font-black uppercase tracking-[0.14em] text-slate-300 clip-panel hover:border-volt/30 hover:text-volt transition"
+                className="border border-white/10 bg-white/[0.03] px-4 py-2 text-xs font-black uppercase tracking-[0.14em] text-slate-300 clip-panel hover:border-volt/30 hover:text-volt transition"
               >
                 {label}
               </Link>

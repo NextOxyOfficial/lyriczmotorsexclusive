@@ -73,12 +73,15 @@ const fallbackSpareParts: Product[] = [
   },
 ]
 
-const categories = ['All', 'Performance Exhaust', 'Brake System', 'Drivetrain']
-
 export default function SparePartsPage() {
   const [parts, setParts] = useState<Product[]>(fallbackSpareParts)
   const [query, setQuery] = useState('')
   const [category, setCategory] = useState('All')
+
+  const categories = useMemo(() => {
+    const unique = Array.from(new Set(parts.map((p) => p.category))).sort()
+    return ['All', ...unique]
+  }, [parts])
   const { addItem } = useCart()
 
   useEffect(() => {
@@ -94,6 +97,7 @@ export default function SparePartsPage() {
         const data = await response.json()
         const loadedParts = Array.isArray(data.results) ? data.results : data
         setParts(loadedParts.length ? loadedParts : fallbackSpareParts)
+        setCategory('All')
       } catch {
         setParts(fallbackSpareParts)
       }
@@ -132,20 +136,35 @@ export default function SparePartsPage() {
 
   return (
     <main className="min-h-screen bg-asphalt text-slate-50">
-      <section className="mx-auto max-w-7xl px-4 py-5 sm:px-6 lg:px-8">
-        <div className="grid gap-4 border border-white/10 bg-white/[0.04] p-4 clip-panel lg:grid-cols-[1fr_auto]">
-          <label className="flex items-center gap-3 border border-white/10 bg-black/25 px-4 py-3 clip-panel">
-            <Search className="h-5 w-5 text-slate-500" />
-            <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search spare parts" className="w-full bg-transparent text-sm text-white outline-none placeholder:text-slate-500" />
-          </label>
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="inline-flex items-center gap-2 px-2 text-xs font-black uppercase tracking-[0.16em] text-slate-500"><SlidersHorizontal className="h-4 w-4" /> Filter</span>
-            {categories.map((item) => (
-              <button key={item} type="button" onClick={() => setCategory(item)} className={`px-3 py-2 text-xs font-black uppercase clip-panel ${category === item ? 'bg-volt text-asphalt' : 'border border-white/10 text-slate-300'}`}>
-                {item}
-              </button>
-            ))}
-          </div>
+      <section className="mx-auto max-w-7xl px-2 py-5 sm:px-6 lg:px-8">
+        {/* Search */}
+        <div className="flex items-center gap-3 border border-white/10 bg-black/25 px-4 py-3 clip-panel">
+          <Search className="h-5 w-5 flex-shrink-0 text-slate-500" />
+          <input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search spare parts"
+            className="w-full bg-transparent text-sm text-white outline-none placeholder:text-slate-500"
+          />
+        </div>
+
+        {/* Category filter */}
+        <div className="mt-3 flex flex-wrap items-center gap-2">
+          <span className="inline-flex items-center gap-2 pr-1 text-xs font-black uppercase tracking-[0.16em] text-slate-500">
+            <SlidersHorizontal className="h-4 w-4" /> Filter
+          </span>
+          {categories.map((item) => (
+            <button
+              key={item}
+              type="button"
+              onClick={() => setCategory(item)}
+              className={`px-4 py-2.5 text-xs font-black uppercase clip-panel ${
+                category === item ? 'bg-volt text-asphalt' : 'border border-white/10 text-slate-300 hover:border-volt/40 hover:text-volt'
+              }`}
+            >
+              {item}
+            </button>
+          ))}
         </div>
 
         <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-3">

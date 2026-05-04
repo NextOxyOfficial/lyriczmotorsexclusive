@@ -117,23 +117,24 @@ export default function CheckoutPage() {
     <div className="min-h-screen bg-asphalt text-white">
       {/* Header */}
       <header className="sticky top-0 z-30 border-b border-white/10 bg-asphalt/95 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4">
-          <Link href="/" className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.2em] text-slate-400 hover:text-volt">
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-4">
+          <Link href="/" className="flex shrink-0 items-center gap-2 text-xs font-black uppercase tracking-[0.2em] text-slate-400 hover:text-volt">
             <ChevronLeft className="h-4 w-4" />
-            Back to Garage
+            <span className="hidden sm:inline">Back to Garage</span>
+            <span className="sm:hidden">Back</span>
           </Link>
-          <div className="text-center">
-            <p className="text-xs font-black uppercase tracking-[0.3em] text-slate-500">Secure Checkout</p>
-            <p className="text-sm font-black uppercase tracking-[0.2em] text-volt">Lyricz Motors</p>
+          <div className="min-w-0 text-center">
+            <p className="text-[10px] font-black uppercase tracking-[0.25em] text-slate-500 sm:text-xs">Secure Checkout</p>
+            <p className="truncate text-sm font-black uppercase tracking-[0.2em] text-volt">Lyricz Motors</p>
           </div>
-          <div className="flex items-center gap-1 text-xs text-volt">
+          <div className="flex shrink-0 items-center gap-1 text-xs text-volt">
             <ShieldCheck className="h-4 w-4" />
             <span className="font-black uppercase tracking-[0.15em]">Secure</span>
           </div>
         </div>
       </header>
 
-      <main className="mx-auto max-w-6xl gap-8 px-4 py-8 lg:grid lg:grid-cols-3 lg:items-start">
+      <main className="mx-auto max-w-6xl gap-8 px-2 py-8 lg:grid lg:grid-cols-3 lg:items-start">
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-6 lg:col-span-2">
           {/* Contact */}
