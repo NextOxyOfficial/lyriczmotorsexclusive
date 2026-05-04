@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { CalendarClock, Menu, ShoppingCart, X } from 'lucide-react'
@@ -14,7 +14,6 @@ const navItems = [
   { label: 'Service', href: '/service' },
   { label: 'Modification', href: '/modification' },
   { label: 'Contact', href: '/contact' },
-  { label: 'Book', href: '/#book' },
 ]
 
 interface HeaderProps {
@@ -26,9 +25,25 @@ export default function Header({ siteSettings }: HeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false)
   const pathname = usePathname()
   const isHome = pathname === '/'
+  const headerRef = useRef<HTMLElement>(null)
+
+  useEffect(() => {
+    if (!menuOpen) return
+    function handleOutside(e: MouseEvent | TouchEvent) {
+      if (headerRef.current && !headerRef.current.contains(e.target as Node)) {
+        setMenuOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleOutside)
+    document.addEventListener('touchstart', handleOutside, { passive: true })
+    return () => {
+      document.removeEventListener('mousedown', handleOutside)
+      document.removeEventListener('touchstart', handleOutside)
+    }
+  }, [menuOpen])
 
   return (
-    <header className="fixed left-0 right-0 top-0 z-50 border-b border-white/10 bg-asphalt/90 backdrop-blur-xl">
+    <header ref={headerRef} className="fixed left-0 right-0 top-0 z-50 border-b border-white/10 bg-asphalt/90 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Logo */}
         <Link href="/" aria-label={`${siteSettings?.site_name ?? 'Lyricz Motors Exclusive'} home`}>
@@ -102,15 +117,6 @@ export default function Header({ siteSettings }: HeaderProps) {
           </button>
         </div>
       </div>
-
-      {/* Backdrop — tap outside to close */}
-      {menuOpen && (
-        <div
-          className="fixed inset-0 z-[-1] md:hidden"
-          aria-hidden="true"
-          onClick={() => setMenuOpen(false)}
-        />
-      )}
 
       {/* Mobile drawer */}
       {menuOpen && (

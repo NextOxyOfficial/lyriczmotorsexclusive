@@ -642,6 +642,7 @@ export default function Home() {
                   <option value="buy_bike">Buy Bike</option>
                   <option value="buy_part">Buy Spare Part</option>
                   <option value="service">Book Service</option>
+                  <option value="home_service">Home Service</option>
                   <option value="finance">Finance</option>
                 </select>
               </label>

@@ -183,6 +183,7 @@ class Lead(models.Model):
         BUY_BIKE = 'buy_bike', 'Buy Bike'
         BUY_PART = 'buy_part', 'Buy Spare Part'
         SERVICE = 'service', 'Book Service'
+        HOME_SERVICE = 'home_service', 'Home Service'
         FINANCE = 'finance', 'Finance'
         GENERAL = 'general', 'General Enquiry'
 
