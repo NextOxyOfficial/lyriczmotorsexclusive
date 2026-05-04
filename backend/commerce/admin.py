@@ -1,9 +1,147 @@
+from django import forms
 from django.contrib import admin
 from django.urls import reverse
 from django.utils.html import format_html
 from django.http import HttpResponseRedirect
 
 from .models import Lead, MarketingEvent, ModificationGallery, ModificationService, Order, OrderItem, Product, ServicePackage, SiteSettings
+
+
+# ── Custom widgets for JSON fields ───────────────────────────────────────────
+
+class LinesWidget(forms.Textarea):
+    """Textarea that stores each non-blank line as a JSON list item."""
+    def __init__(self, *args, **kwargs):
+        kwargs.setdefault('attrs', {}).update({'rows': 4, 'style': 'width:100%;font-family:monospace;font-size:13px;'})
+        super().__init__(*args, **kwargs)
+
+    def format_value(self, value):
+        if isinstance(value, list):
+            return '\n'.join(str(v) for v in value)
+        return value or ''
+
+    def value_from_datadict(self, data, files, name):
+        raw = super().value_from_datadict(data, files, name) or ''
+        return [line.strip() for line in raw.splitlines() if line.strip()]
+
+
+class KeyValueWidget(forms.Textarea):
+    """Textarea that stores 'Key: Value' lines as a JSON dict."""
+    def __init__(self, *args, **kwargs):
+        kwargs.setdefault('attrs', {}).update({
+            'rows': 4,
+            'style': 'width:100%;font-family:monospace;font-size:13px;',
+            'placeholder': 'Engine: 998 cc\nPower: 189 bhp\nWeight: 193 kg',
+        })
+        super().__init__(*args, **kwargs)
+
+    def format_value(self, value):
+        if isinstance(value, dict):
+            return '\n'.join(f'{k}: {v}' for k, v in value.items())
+        return value or ''
+
+    def value_from_datadict(self, data, files, name):
+        raw = super().value_from_datadict(data, files, name) or ''
+        result = {}
+        for line in raw.splitlines():
+            line = line.strip()
+            if ':' in line:
+                key, _, val = line.partition(':')
+                key, val = key.strip(), val.strip()
+                if key:
+                    result[key] = val
+        return result
+
+
+class LinesField(forms.CharField):
+    widget = LinesWidget
+
+    def prepare_value(self, value):
+        if isinstance(value, list):
+            return '\n'.join(str(v) for v in value)
+        return value or ''
+
+    def to_python(self, value):
+        if isinstance(value, list):
+            return value
+        if not value:
+            return []
+        return [line.strip() for line in value.splitlines() if line.strip()]
+
+
+class KeyValueField(forms.CharField):
+    widget = KeyValueWidget
+
+    def prepare_value(self, value):
+        if isinstance(value, dict):
+            return '\n'.join(f'{k}: {v}' for k, v in value.items())
+        return value or ''
+
+    def to_python(self, value):
+        if isinstance(value, dict):
+            return value
+        if not value:
+            return {}
+        result = {}
+        for line in str(value).splitlines():
+            line = line.strip()
+            if ':' in line:
+                key, _, val = line.partition(':')
+                key, val = key.strip(), val.strip()
+                if key:
+                    result[key] = val
+        return result
+
+
+class ProductAdminForm(forms.ModelForm):
+    specs = KeyValueField(
+        required=False,
+        label='Specs',
+        help_text='প্রতি লাইনে: Key: Value — যেমন: Engine: 998 cc',
+    )
+    color_options = LinesField(
+        required=False,
+        label='Color Options',
+        help_text='প্রতি লাইনে একটা রঙের নাম — যেমন: Matte Black',
+    )
+    gallery_images = LinesField(
+        required=False,
+        label='Gallery Images',
+        help_text='প্রতি লাইনে একটা image URL',
+    )
+    compatible_bikes = LinesField(
+        required=False,
+        label='Compatible Bikes',
+        help_text='প্রতি লাইনে একটা bike model নাম',
+    )
+
+    class Meta:
+        model = Product
+        fields = '__all__'
+
+
+class ServicePackageAdminForm(forms.ModelForm):
+    perks = LinesField(
+        required=False,
+        label='Perks',
+        help_text='প্রতি লাইনে একটা perk — যেমন: Free oil change',
+    )
+
+    class Meta:
+        model = ServicePackage
+        fields = '__all__'
+
+
+class ModificationServiceAdminForm(forms.ModelForm):
+    perks = LinesField(
+        required=False,
+        label='Perks',
+        help_text='প্রতি লাইনে একটা perk',
+    )
+
+    class Meta:
+        model = ModificationService
+        fields = '__all__'
 
 
 @admin.register(SiteSettings)
@@ -81,6 +219,7 @@ class SiteSettingsAdmin(admin.ModelAdmin):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
+    form = ProductAdminForm
     list_display = ('name', 'product_type', 'brand', 'price', 'status', 'is_featured', 'image_preview')
     list_filter = ('product_type', 'status', 'is_featured', 'brand')
     search_fields = ('name', 'brand', 'category')
@@ -127,6 +266,7 @@ class ProductAdmin(admin.ModelAdmin):
 
 @admin.register(ServicePackage)
 class ServicePackageAdmin(admin.ModelAdmin):
+    form = ServicePackageAdminForm
     list_display = ('title', 'tier', 'price', 'duration', 'is_featured')
     list_filter = ('tier', 'is_featured')
     prepopulated_fields = {'slug': ('title',)}
@@ -162,6 +302,7 @@ class OrderAdmin(admin.ModelAdmin):
 
 @admin.register(ModificationService)
 class ModificationServiceAdmin(admin.ModelAdmin):
+    form = ModificationServiceAdminForm
     list_display = ('title', 'tag', 'price_display', 'duration', 'accent_color', 'sort_order', 'is_active')
     list_editable = ('sort_order', 'is_active')
     list_filter = ('is_active', 'accent_color')
