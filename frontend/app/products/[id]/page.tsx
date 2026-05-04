@@ -65,7 +65,7 @@ type Product = {
 }
 
 // -- Constants --------------------------------------------------------------
-const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://127.0.0.1:8000/api'
+const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000/api'
 
 const STATUS_COLORS: Record<string, string> = {
   in_stock: 'bg-volt/10 text-volt border-volt/30',
