@@ -189,6 +189,64 @@ export default function ModificationPage() {
           </div>
         </section>
 
+        {/* ── Services Grid ── */}
+        <section className="mx-auto max-w-7xl px-1 py-10 sm:px-6 sm:py-14 lg:px-8">
+          <div className="mb-8">
+            <p className="text-xs font-black uppercase tracking-[0.24em] text-ignition">What We Do</p>
+            <h2 className="mt-2 text-2xl font-black uppercase text-white sm:text-3xl">Modification Services</h2>
+          </div>
+
+          {loadingSvc ? (
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {[...Array(6)].map((_, i) => (
+                <div key={i} className="h-56 animate-pulse bg-white/5 clip-panel" />
+              ))}
+            </div>
+          ) : (
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {services.map((svc) => {
+                const { color, border, bg } = accentFor(svc.accent_color)
+                return (
+                  <article
+                    key={svc.id}
+                    className={`relative flex flex-col border ${border} ${bg} p-5 clip-panel shadow-hud`}
+                  >
+                    {svc.tag && (
+                      <span className="absolute right-3 top-3 border border-white/10 bg-black/50 px-2 py-0.5 text-[9px] font-black uppercase tracking-wide text-slate-400 clip-panel">
+                        {svc.tag}
+                      </span>
+                    )}
+                    <div className={`mb-4 flex h-10 w-10 items-center justify-center border border-white/10 bg-black/30 clip-panel ${color}`}>
+                      <IconFor accent={svc.accent_color} />
+                    </div>
+                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">{svc.duration}</p>
+                    <h3 className="mt-1 text-base font-black uppercase text-white">{svc.title}</h3>
+                    <p className="mt-1 flex-1 text-sm leading-5 text-slate-400">{svc.description}</p>
+                    <ul className="mt-3 space-y-1.5">
+                      {(svc.perks ?? []).map((perk) => (
+                        <li key={perk} className="flex items-center gap-2 text-xs text-slate-300">
+                          <CheckCircle className="h-3 w-3 flex-shrink-0 text-volt" />
+                          {perk}
+                        </li>
+                      ))}
+                    </ul>
+                    <div className="mt-4 flex items-center justify-between gap-2 border-t border-white/10 pt-4">
+                      <p className="text-xl font-black text-ignition">৳{svc.price_display}</p>
+                      <button
+                        type="button"
+                        onClick={() => handleBook(svc.title)}
+                        className="inline-flex items-center gap-1.5 border border-ignition/40 bg-ignition/10 px-3 py-2 text-[11px] font-black uppercase text-ignition clip-panel hover:bg-ignition/20 transition"
+                      >
+                        <CalendarClock className="h-3.5 w-3.5" /> Book
+                      </button>
+                    </div>
+                  </article>
+                )
+              })}
+            </div>
+          )}
+        </section>
+
         {/* ── Gallery ── */}
         <section className="border-b border-white/10 bg-pitlane py-10 sm:py-14">
           <div className="mx-auto max-w-7xl px-1 sm:px-6 lg:px-8">
@@ -260,64 +318,6 @@ export default function ModificationPage() {
               </div>
             )}
           </div>
-        </section>
-
-        {/* ── Services Grid ── */}
-        <section className="mx-auto max-w-7xl px-1 py-10 sm:px-6 sm:py-14 lg:px-8">
-          <div className="mb-8">
-            <p className="text-xs font-black uppercase tracking-[0.24em] text-ignition">What We Do</p>
-            <h2 className="mt-2 text-2xl font-black uppercase text-white sm:text-3xl">Modification Services</h2>
-          </div>
-
-          {loadingSvc ? (
-            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              {[...Array(6)].map((_, i) => (
-                <div key={i} className="h-56 animate-pulse bg-white/5 clip-panel" />
-              ))}
-            </div>
-          ) : (
-            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              {services.map((svc) => {
-                const { color, border, bg } = accentFor(svc.accent_color)
-                return (
-                  <article
-                    key={svc.id}
-                    className={`relative flex flex-col border ${border} ${bg} p-5 clip-panel shadow-hud`}
-                  >
-                    {svc.tag && (
-                      <span className="absolute right-3 top-3 border border-white/10 bg-black/50 px-2 py-0.5 text-[9px] font-black uppercase tracking-wide text-slate-400 clip-panel">
-                        {svc.tag}
-                      </span>
-                    )}
-                    <div className={`mb-4 flex h-10 w-10 items-center justify-center border border-white/10 bg-black/30 clip-panel ${color}`}>
-                      <IconFor accent={svc.accent_color} />
-                    </div>
-                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">{svc.duration}</p>
-                    <h3 className="mt-1 text-base font-black uppercase text-white">{svc.title}</h3>
-                    <p className="mt-1 flex-1 text-sm leading-5 text-slate-400">{svc.description}</p>
-                    <ul className="mt-3 space-y-1.5">
-                      {(svc.perks ?? []).map((perk) => (
-                        <li key={perk} className="flex items-center gap-2 text-xs text-slate-300">
-                          <CheckCircle className="h-3 w-3 flex-shrink-0 text-volt" />
-                          {perk}
-                        </li>
-                      ))}
-                    </ul>
-                    <div className="mt-4 flex items-center justify-between gap-2 border-t border-white/10 pt-4">
-                      <p className="text-xl font-black text-ignition">৳{svc.price_display}</p>
-                      <button
-                        type="button"
-                        onClick={() => handleBook(svc.title)}
-                        className="inline-flex items-center gap-1.5 border border-ignition/40 bg-ignition/10 px-3 py-2 text-[11px] font-black uppercase text-ignition clip-panel hover:bg-ignition/20 transition"
-                      >
-                        <CalendarClock className="h-3.5 w-3.5" /> Book
-                      </button>
-                    </div>
-                  </article>
-                )
-              })}
-            </div>
-          )}
         </section>
 
         {/* ── CTA strip ── */}
