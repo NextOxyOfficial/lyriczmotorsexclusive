@@ -285,7 +285,7 @@ export default function Home() {
           <div className="absolute inset-0 scanline opacity-25" />
         </div>
 
-        <div className="relative mx-auto w-full max-w-7xl px-4 pb-8 pt-16 sm:px-6 sm:pb-12 sm:pt-20 lg:grid lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-8 lg:px-8 lg:pb-14 lg:pt-20">
+        <div className="relative mx-auto w-full max-w-7xl px-2 pb-8 pt-16 sm:px-6 sm:pb-12 sm:pt-20 lg:grid lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-8 lg:px-8 lg:pb-14 lg:pt-20">
           <div>
             <div className="mb-4 inline-flex items-center gap-2 border border-volt/30 bg-volt/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.22em] text-volt clip-panel sm:px-4 sm:py-2 sm:text-xs">
               <Cpu className="h-3.5 w-3.5 sm:h-4 sm:w-4" /> Premium Garage Console

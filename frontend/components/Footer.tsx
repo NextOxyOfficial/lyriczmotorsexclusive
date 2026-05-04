@@ -4,11 +4,11 @@ import SiteLogo from '@/components/SiteLogo'
 import type { SiteSettings } from '@/lib/site-settings'
 
 const quickLinks = [
-  { label: 'Bikes', href: '/#garage' },
+  { label: 'Bikes', href: '/bikes' },
   { label: 'Spare Parts', href: '/spare-parts' },
-  { label: 'Service', href: '/#service' },
+  { label: 'Service', href: '/service' },
+  { label: 'Contact', href: '/contact' },
   { label: 'Book a Slot', href: '/#book' },
-  { label: 'Checkout', href: '/checkout' },
 ]
 
 interface FooterProps {
