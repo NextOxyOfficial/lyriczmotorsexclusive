@@ -361,7 +361,7 @@ function BikeDetailView({
           )}
         </div>
 
-        {/* Hero content — anchored bottom */
+        {/* Hero content — anchored bottom */}
         <div className="relative z-10 px-2 pb-4 sm:px-6 sm:pb-12 lg:px-8">
           <div className="mx-auto max-w-7xl">
             {/* Dot indicators + counter */}
