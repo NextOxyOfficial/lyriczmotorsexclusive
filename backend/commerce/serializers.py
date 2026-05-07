@@ -2,7 +2,7 @@ import uuid
 
 from rest_framework import serializers
 
-from .models import Lead, MarketingEvent, ModificationGallery, ModificationService, Order, OrderItem, Product, ServicePackage, SiteSettings
+from .models import Lead, MarketingEvent, ModificationGallery, ModificationService, Order, OrderItem, Product, ProductImage, ServicePackage, SiteSettings
 
 
 class SiteSettingsSerializer(serializers.ModelSerializer):
@@ -26,7 +26,23 @@ class SiteSettingsSerializer(serializers.ModelSerializer):
         return data
 
 
+class ProductImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductImage
+        fields = ['id', 'image_url', 'sort_order']
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        request = self.context.get('request')
+        if instance.image:
+            url = instance.image.url
+            data['image_url'] = request.build_absolute_uri(url) if request else url
+        return data
+
+
 class ProductSerializer(serializers.ModelSerializer):
+    product_images = ProductImageSerializer(many=True, read_only=True)
+
     class Meta:
         model = Product
         fields = '__all__'

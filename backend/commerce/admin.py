@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.utils.html import format_html
 from django.http import HttpResponseRedirect
 
-from .models import Lead, MarketingEvent, ModificationGallery, ModificationService, Order, OrderItem, Product, ServicePackage, SiteSettings
+from .models import Lead, MarketingEvent, ModificationGallery, ModificationService, Order, OrderItem, Product, ProductImage, ServicePackage, SiteSettings
 
 
 # ── Custom widgets for JSON fields ───────────────────────────────────────────
@@ -217,9 +217,24 @@ class SiteSettingsAdmin(admin.ModelAdmin):
         )
 
 
+class ProductImageInline(admin.TabularInline):
+    model = ProductImage
+    extra = 1
+    fields = ('sort_order', 'image', 'image_preview_inline', 'image_url')
+    readonly_fields = ('image_preview_inline',)
+
+    def image_preview_inline(self, obj):
+        url = obj.image.url if obj.image else obj.image_url
+        if url:
+            return format_html('<img src="{}" style="max-height:60px;max-width:120px;object-fit:cover;border-radius:3px;" />', url)
+        return '—'
+    image_preview_inline.short_description = 'Preview'
+
+
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     form = ProductAdminForm
+    inlines = [ProductImageInline]
     list_display = ('name', 'product_type', 'brand', 'price', 'status', 'is_featured', 'image_preview')
     list_filter = ('product_type', 'status', 'is_featured', 'brand')
     search_fields = ('name', 'brand', 'category')

@@ -280,6 +280,30 @@ class MarketingEvent(models.Model):
         return self.event_name
 
 
+class ProductImage(models.Model):
+    """Additional gallery images for a Product — supports file upload or external URL."""
+    product = models.ForeignKey(
+        'Product', on_delete=models.CASCADE, related_name='product_images',
+    )
+    image = models.ImageField(
+        upload_to='products/gallery/', null=True, blank=True,
+        help_text='Upload an image file (takes priority over URL)',
+    )
+    image_url = models.URLField(
+        max_length=600, blank=True,
+        help_text='External image URL (used when no file uploaded)',
+    )
+    sort_order = models.PositiveSmallIntegerField(default=0)
+
+    class Meta:
+        ordering = ['sort_order', 'id']
+        verbose_name = 'Product Gallery Image'
+        verbose_name_plural = 'Product Gallery Images'
+
+    def __str__(self):
+        return f'Image {self.sort_order} – {self.product.name}'
+
+
 class ModificationService(models.Model):
     """A modification service offered (e.g. Full Wrap, Custom Paint)."""
     title = models.CharField(max_length=140)

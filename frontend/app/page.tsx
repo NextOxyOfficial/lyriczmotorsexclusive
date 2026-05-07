@@ -334,12 +334,9 @@ export default function Home() {
           <div className="absolute inset-0 scanline opacity-25" />
         </div>
 
-        <div className="relative mx-auto w-full max-w-7xl px-2 pb-4 pt-12 sm:px-6 sm:pb-12 sm:pt-20 lg:grid lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-8 lg:px-8 lg:pb-14 lg:pt-20">
-          <div>
-            <div className="mb-4 inline-flex items-center gap-2 border border-volt/30 bg-volt/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.22em] text-volt clip-panel sm:px-4 sm:py-2 sm:text-xs">
-              <Cpu className="h-3.5 w-3.5 sm:h-4 sm:w-4" /> Premium Garage Console
-            </div>
-            <h1 className="text-[1.85rem] font-black uppercase leading-[1.06] text-white sm:text-5xl lg:text-6xl xl:text-7xl">
+        <div className="relative mx-auto w-full max-w-7xl px-2 pb-4 pt-12 sm:px-6 sm:pb-12 sm:pt-20 flex flex-col gap-4 lg:grid lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-8 lg:px-8 lg:pb-14 lg:pt-20">
+          <div className="order-2 lg:order-1">
+            <h1 className="text-[1.85rem] font-black uppercase leading-[1.06] text-white sm:text-5xl lg:text-5xl xl:text-5xl">
               Bikes, Spare Parts, Service. Built Like A Loadout.
             </h1>
             <p className="mt-4 max-w-lg text-sm leading-6 text-slate-300 sm:text-base sm:leading-7">
@@ -356,13 +353,13 @@ export default function Home() {
                 <Wrench className="h-4 w-4" /> Service Center
               </a>
               <a href="/modification" className="inline-flex items-center justify-center gap-2 border border-boost/50 bg-boost/20 px-4 py-3.5 text-xs font-black uppercase text-boost clip-panel hover:bg-boost/30 transition sm:px-6 sm:py-4 sm:text-sm">
-                <Zap className="h-4 w-4" /> Modification Center
+                <Zap className="h-4 w-4" /> Modification
               </a>
             </div>
           </div>
 
           {featuredList.length > 0 ? (
-            <div className="mt-6 border border-white/10 bg-black/40 shadow-hud backdrop-blur-md clip-panel sm:mt-0 sm:p-4 lg:mt-0">
+            <div className="order-1 lg:order-2 border border-white/10 bg-black/40 shadow-hud backdrop-blur-md clip-panel sm:p-4">
               {/* Slides */}
               <div className="relative overflow-hidden clip-panel">
                 {featuredList.map((fp, i) => (

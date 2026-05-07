@@ -56,6 +56,7 @@ type Product = {
   abs?: boolean | null
   color_options?: string[]
   gallery_images?: string[]
+  product_images?: { id: number; image_url: string; sort_order: number }[]
   // Spare-part-specific
   part_number?: string
   material?: string
@@ -313,7 +314,11 @@ function BikeDetailView({
 }) {
   const savings = product.compare_at_price ? Number(product.compare_at_price) - Number(product.price) : 0
   const specEntries = Object.entries(product.specs)
-  const images = [product.image_url, ...(product.gallery_images ?? [])].filter(Boolean)
+  const images = [
+    product.image_url,
+    ...(product.gallery_images ?? []),
+    ...(product.product_images ?? []).map((img) => img.image_url),
+  ].filter(Boolean)
   const [slideIdx, setSlideIdx] = useState(0)
   const goTo = (i: number) => setSlideIdx((i + images.length) % images.length)
 
@@ -333,7 +338,7 @@ function BikeDetailView({
             />
           ))}
           {/* Overlay — keep top area clear so the bike shows prominently */}
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(9,11,16,0.0)_0%,rgba(9,11,16,0.10)_30%,rgba(9,11,16,0.60)_62%,rgba(9,11,16,0.94)_100%)]" />
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(9,11,16,0.0)_0%,rgba(9,11,16,0.05)_30%,rgba(9,11,16,0.45)_65%,rgba(9,11,16,0.88)_100%)]" />
           <div className="absolute inset-0 hud-grid opacity-25" />
           <div className="absolute inset-0 scanline opacity-15" />
         </div>
@@ -380,7 +385,7 @@ function BikeDetailView({
         )}
 
         {/* Hero content — anchored bottom */}
-        <div className="relative z-10 px-4 pb-8 sm:px-6 sm:pb-12 lg:px-8">
+        <div className="relative z-10 px-2 pb-8 sm:px-6 sm:pb-12 lg:px-8">
           <div className="mx-auto max-w-7xl">
             {/* Dot indicators + counter */}
             {images.length > 1 && (
