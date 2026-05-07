@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     # Third party apps
     'rest_framework',
     'corsheaders',
+    'django_summernote',
     # Local apps
     'commerce',
 ]

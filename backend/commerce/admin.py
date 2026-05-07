@@ -3,6 +3,7 @@ from django.contrib import admin
 from django.urls import reverse
 from django.utils.html import format_html
 from django.http import HttpResponseRedirect
+from django_summernote.widgets import SummernoteWidget
 
 from .models import Lead, MarketingEvent, ModificationGallery, ModificationService, Order, OrderItem, Product, ProductImage, ServicePackage, SiteSettings
 
@@ -118,6 +119,9 @@ class ProductAdminForm(forms.ModelForm):
     class Meta:
         model = Product
         fields = '__all__'
+        widgets = {
+            'body': SummernoteWidget(attrs={'summernote': {'height': '400px'}}),
+        }
 
 
 class ServicePackageAdminForm(forms.ModelForm):
@@ -253,7 +257,11 @@ class ProductAdmin(admin.ModelAdmin):
             'fields': ('image', 'image_preview', 'image_url'),
         }),
         ('Details', {
-            'fields': ('power_score', 'specs', 'gallery_images')
+            'fields': ('power_score', 'gallery_images')
+        }),
+        ('Product Body / Description', {
+            'description': 'Rich text content shown on the product detail page — can include headings, images, tables, etc.',
+            'fields': ('body',)
         }),
         ('Bike-Specific Fields', {
             'classes': ('collapse',),

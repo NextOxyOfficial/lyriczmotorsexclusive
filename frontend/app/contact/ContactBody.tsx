@@ -97,9 +97,6 @@ export default function ContactBody({ settings }: ContactBodyProps) {
         <div className="relative mx-auto max-w-7xl px-1 sm:px-6 lg:px-8">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-8">
             <div className="flex-1">
-              <p className="inline-flex items-center gap-2 border border-ignition/30 bg-ignition/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-ignition clip-panel">
-                <MessageSquare className="h-3 w-3" /> Contact Us
-              </p>
               <h1 className="mt-2 text-xl font-black uppercase leading-tight sm:text-2xl lg:text-3xl">
                 Get In Touch.<br className="hidden sm:block" /> We&apos;re Here For You.
               </h1>

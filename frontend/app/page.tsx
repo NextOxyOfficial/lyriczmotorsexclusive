@@ -310,7 +310,7 @@ export default function Home() {
     <main className="min-h-screen overflow-hidden bg-asphalt text-slate-50">
 
       {/* ── Hero ── */}
-      <section id="top" className="relative flex min-h-[calc(100vh-200px)] flex-col justify-start pb-10 sm:pb-0">
+      <section id="top" className="relative flex flex-col justify-start pb-10 sm:pb-0">
         <div className="absolute inset-0 overflow-hidden">
           {heroSettings.hero_media_type === 'video' && heroSettings.hero_video_url ? (
             <>
@@ -334,7 +334,7 @@ export default function Home() {
           <div className="absolute inset-0 scanline opacity-25" />
         </div>
 
-        <div className="relative mx-auto w-full max-w-7xl px-2 pb-4 pt-12 sm:px-6 sm:pb-12 sm:pt-20 flex flex-col gap-4 lg:grid lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-8 lg:px-8 lg:pb-14 lg:pt-20">
+        <div className="relative mx-auto w-full max-w-7xl px-2 pb-4 pt-4 sm:px-6 sm:pb-12 sm:pt-20 flex flex-col gap-4 lg:grid lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-8 lg:px-8 lg:pb-14 lg:pt-20">
           <div className="order-2 lg:order-1">
             <h1 className="text-[1.85rem] font-black uppercase leading-[1.06] text-white sm:text-5xl lg:text-5xl xl:text-5xl">
               Bikes, Spare Parts, Service. Built Like A Loadout.
@@ -367,7 +367,7 @@ export default function Home() {
                     key={fp.id}
                     className={`transition-opacity duration-500 ${i === slideIndex ? 'block opacity-100' : 'hidden opacity-0'}`}
                   >
-                    <img src={fp.image_url} alt={fp.name} className="h-40 w-full object-cover sm:h-72 lg:h-80" />
+                    <img src={fp.image_url} alt={fp.name} className="h-72 w-full object-cover sm:h-80 lg:h-[420px]" />
                   </div>
                 ))}
                 <div className="absolute left-3 top-3 border border-boost/50 bg-boost px-2 py-1 text-[10px] font-black uppercase text-asphalt clip-panel">
@@ -614,7 +614,7 @@ export default function Home() {
       <section id="book" className="relative bg-pitlane py-12 sm:py-20">
         <div className="absolute inset-0 hud-grid opacity-40" />
         <div className="relative mx-auto grid max-w-7xl gap-5 px-1 sm:gap-8 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:px-8">
-          <div className="border border-white/10 bg-black/35 p-5 clip-panel sm:p-6">
+          <div className="border border-white/10 bg-black/35 p-2 clip-panel sm:p-6">
             <p className="text-[10px] font-black uppercase tracking-[0.24em] text-volt sm:text-sm">Rider Request</p>
             <h2 className="mt-1 text-2xl font-black uppercase text-white sm:mt-2 sm:text-4xl">Lock A Deal, Part, Or Service Slot</h2>
             <p className="mt-3 text-sm leading-6 text-slate-300 sm:mt-4">
@@ -628,7 +628,7 @@ export default function Home() {
             </div>
           </div>
 
-          <form onSubmit={submitLead} className="border border-white/10 bg-white/[0.05] p-3 shadow-hud clip-panel">
+          <form onSubmit={submitLead} className="border border-white/10 bg-white/[0.05] p-2 shadow-hud clip-panel">
             <div className="grid gap-3 sm:grid-cols-2 sm:gap-4">
               <Field label="Name" name="name" placeholder="Your name" required />
               <Field label="Phone" name="phone" placeholder="01XXXXXXXXX" required />

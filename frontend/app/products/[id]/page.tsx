@@ -63,16 +63,18 @@ type Product = {
   compatible_bikes?: string[]
   warranty_months?: number | null
   fitment_note?: string
+  // Rich text
+  body?: string
 }
 
 // -- Constants --------------------------------------------------------------
 const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000/api'
 
 const STATUS_COLORS: Record<string, string> = {
-  in_stock: 'bg-volt/10 text-volt border-volt/30',
-  limited: 'bg-boost/10 text-boost border-boost/30',
-  preorder: 'bg-blue-500/10 text-blue-400 border-blue-500/30',
-  out_of_stock: 'bg-ignition/10 text-ignition border-ignition/30',
+  in_stock: 'bg-volt text-asphalt border-volt',
+  limited: 'bg-boost text-asphalt border-boost',
+  preorder: 'bg-blue-500 text-white border-blue-500',
+  out_of_stock: 'bg-ignition text-white border-ignition',
 }
 
 const fallbackProducts: Product[] = [
@@ -313,7 +315,6 @@ function BikeDetailView({
   onBookNow: () => void
 }) {
   const savings = product.compare_at_price ? Number(product.compare_at_price) - Number(product.price) : 0
-  const specEntries = Object.entries(product.specs)
   const images = [
     product.image_url,
     ...(product.gallery_images ?? []),
@@ -337,10 +338,8 @@ function BikeDetailView({
               className={"absolute inset-0 h-full w-full object-cover object-center transition-opacity duration-700 " + (i === slideIdx ? 'opacity-100' : 'opacity-0')}
             />
           ))}
-          {/* Overlay — keep top area clear so the bike shows prominently */}
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(9,11,16,0.0)_0%,rgba(9,11,16,0.05)_30%,rgba(9,11,16,0.45)_65%,rgba(9,11,16,0.88)_100%)]" />
-          <div className="absolute inset-0 hud-grid opacity-25" />
-          <div className="absolute inset-0 scanline opacity-15" />
+          {/* Overlay — minimal, keep bike fully visible */}
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(9,11,16,0.0)_0%,rgba(9,11,16,0.0)_40%,rgba(9,11,16,0.35)_65%,rgba(9,11,16,0.82)_100%)]" />
         </div>
 
         {/* Back nav — top left */}
@@ -352,40 +351,18 @@ function BikeDetailView({
 
         {/* Status + featured — top right */}
         <div className="absolute right-4 top-4 z-10 flex flex-col items-end gap-2 sm:right-6 sm:top-6">
-          <span className={"border px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] clip-panel sm:text-xs " + (STATUS_COLORS[product.status] ?? 'bg-white/10 text-white border-white/20')}>
+          <span className={"border px-3 py-2 text-[11px] font-black uppercase tracking-[0.18em] clip-panel shadow-lg backdrop-blur-sm sm:text-xs " + (STATUS_COLORS[product.status] ?? 'bg-black/80 text-white border-white/30')}>
             {product.status.replace(/_/g, ' ')}
           </span>
           {product.is_featured && (
-            <span className="flex items-center gap-1.5 border border-boost/40 bg-boost/10 px-3 py-1.5 text-[10px] font-black uppercase text-boost clip-panel sm:text-xs">
-              <Award className="h-3 w-3" /> Featured
+            <span className="flex items-center gap-1.5 bg-volt px-3 py-2 text-[11px] font-black uppercase text-asphalt clip-panel shadow-lg sm:text-xs">
+              <Award className="h-3.5 w-3.5" /> Featured
             </span>
           )}
         </div>
 
-        {/* Prev / Next arrows — only when multiple images */}
-        {images.length > 1 && (
-          <>
-            <button
-              type="button"
-              onClick={() => goTo(slideIdx - 1)}
-              className="absolute left-3 top-1/2 z-10 -translate-y-1/2 flex h-10 w-10 items-center justify-center border border-white/20 bg-black/55 text-white backdrop-blur-sm clip-panel hover:border-volt/50 hover:text-volt transition sm:left-5 sm:h-11 sm:w-11"
-              aria-label="Previous image"
-            >
-              <ChevronLeft className="h-5 w-5" />
-            </button>
-            <button
-              type="button"
-              onClick={() => goTo(slideIdx + 1)}
-              className="absolute right-3 top-1/2 z-10 -translate-y-1/2 flex h-10 w-10 items-center justify-center border border-white/20 bg-black/55 text-white backdrop-blur-sm clip-panel hover:border-volt/50 hover:text-volt transition sm:right-5 sm:h-11 sm:w-11"
-              aria-label="Next image"
-            >
-              <ChevronRight className="h-5 w-5" />
-            </button>
-          </>
-        )}
-
-        {/* Hero content — anchored bottom */}
-        <div className="relative z-10 px-2 pb-8 sm:px-6 sm:pb-12 lg:px-8">
+        {/* Hero content — anchored bottom */
+        <div className="relative z-10 px-2 pb-4 sm:px-6 sm:pb-12 lg:px-8">
           <div className="mx-auto max-w-7xl">
             {/* Dot indicators + counter */}
             {images.length > 1 && (
@@ -402,10 +379,7 @@ function BikeDetailView({
                 <span className="ml-1 text-[9px] font-black uppercase tracking-[0.2em] text-white/50">{slideIdx + 1} / {images.length}</span>
               </div>
             )}
-            <span className="inline-flex items-center gap-1.5 border border-volt/30 bg-volt/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.2em] text-volt clip-panel sm:text-xs">
-              <Cpu className="h-3 w-3 sm:h-3.5 sm:w-3.5" /> {product.category}
-            </span>
-            <h1 className="mt-3 max-w-4xl text-[2.2rem] font-black uppercase leading-[1.04] text-white sm:text-5xl lg:text-7xl">
+            <h1 className="mt-3 max-w-4xl text-2xl font-black uppercase leading-[1.04] text-white sm:text-5xl lg:text-5xl">
               {product.name}
             </h1>
             <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-300 sm:text-base sm:leading-7">{product.short_description}</p>
@@ -419,7 +393,7 @@ function BikeDetailView({
           <div>
             <p className="text-[10px] font-black uppercase tracking-[0.22em] text-slate-500 sm:text-xs">Selling Price</p>
             <div className="mt-1 flex flex-wrap items-end gap-3">
-              <span className="text-4xl font-black text-volt sm:text-5xl">{formatMoney(Number(product.price))}</span>
+              <span className="text-3xl font-black text-volt sm:text-4xl">{formatMoney(Number(product.price))}</span>
               {product.compare_at_price && (
                 <div className="flex flex-col pb-1">
                   <span className="text-sm font-bold text-slate-500 line-through">{formatMoney(Number(product.compare_at_price))}</span>
@@ -475,19 +449,7 @@ function BikeDetailView({
                 ))}
               </div>
 
-              {specEntries.length > 0 && (
-                <div>
-                  <h3 className="mb-4 text-[10px] font-black uppercase tracking-[0.28em] text-slate-500 sm:text-xs">More Details</h3>
-                  <div className="overflow-hidden border border-white/10 clip-panel">
-                    {specEntries.map(([key, value], i) => (
-                      <div key={key} className={"flex items-center justify-between gap-6 px-5 py-3.5 " + (i % 2 === 0 ? 'bg-graphite' : 'bg-pitlane/70')}>
-                        <span className="text-xs font-black uppercase tracking-[0.15em] text-slate-500 shrink-0 w-28">{key}</span>
-                        <span className="text-right text-sm font-black text-white">{value}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
+
 
               {product.color_options && product.color_options.length > 0 && (
                 <div>
@@ -560,6 +522,20 @@ function BikeDetailView({
         </div>
       </section>
 
+      {/* ── Body / Description ── */}
+      <section className="py-10 sm:py-14">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+          {product.body ? (
+            <div
+              className="prose prose-invert prose-sm sm:prose-base max-w-none prose-headings:font-black prose-headings:uppercase prose-headings:tracking-wide prose-a:text-volt prose-img:rounded prose-img:border prose-img:border-white/10"
+              dangerouslySetInnerHTML={{ __html: product.body }}
+            />
+          ) : (
+            <p className="text-sm leading-7 text-slate-400">{product.short_description}</p>
+          )}
+        </div>
+      </section>
+
       <RelatedSection related={related} backLink="/#garage" backLabel="Garage" />
     </div>
   )
@@ -582,7 +558,12 @@ function SparePartDetailView({
   onBookNow: () => void
 }) {
   const savings = product.compare_at_price ? Number(product.compare_at_price) - Number(product.price) : 0
-  const specEntries = Object.entries(product.specs)
+  const images = [
+    product.image_url,
+    ...(product.product_images ?? []).map((img) => img.image_url),
+  ].filter(Boolean)
+  const [slideIdx, setSlideIdx] = useState(0)
+  const goTo = (i: number) => setSlideIdx((i + images.length) % images.length)
 
   return (
     <div className="min-h-screen bg-asphalt text-slate-50">
@@ -599,40 +580,62 @@ function SparePartDetailView({
       </div>
 
       {/* Main product layout */}
-      <section className="py-8 sm:py-12">
+      <section className="py-4 sm:py-12">
         <div className="mx-auto max-w-7xl px-1 sm:px-6 lg:px-8">
 
           {/* ── Top: Image + buy panel side by side ── */}
           <div className="grid gap-6 lg:grid-cols-[1fr_380px] lg:gap-8">
 
-            {/* Image */}
+            {/* Image / Slider */}
             <div className="relative overflow-hidden border border-white/10 bg-black/20 shadow-hud clip-panel">
-              <img src={product.image_url} alt={product.name} className="h-64 w-full object-contain bg-black/10 sm:h-80 lg:h-[420px]" style={{filter:'brightness(1.08) contrast(1.03)'}} />
-              <span className={"absolute left-4 top-4 border px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.15em] clip-panel sm:text-xs " + (STATUS_COLORS[product.status] ?? 'bg-white/10 text-white border-white/20')}>
-                {product.status.replace(/_/g, ' ')}
-              </span>
-              {product.is_featured && (
-                <span className="absolute right-4 top-4 flex items-center gap-1.5 border border-boost/40 bg-boost/10 px-3 py-1.5 text-[10px] font-black uppercase text-boost clip-panel sm:text-xs">
-                  <Award className="h-3 w-3" /> Featured
-                </span>
+              {/* Slides */}
+              {images.map((src, i) => (
+                <img
+                  key={src}
+                  src={src}
+                  alt={i === 0 ? product.name : `${product.name} view ${i + 1}`}
+                  className={"h-[420px] w-full object-contain bg-black/10 sm:h-[480px] lg:h-[520px] transition-opacity duration-700 " + (i === slideIdx ? 'opacity-100' : 'absolute inset-0 opacity-0')}
+                  style={{filter:'brightness(1.08) contrast(1.03)'}}
+                />
+              ))}
+
+
+
+              {/* Dot indicators */}
+              {images.length > 1 && (
+                <div className="absolute bottom-3 left-1/2 z-10 flex -translate-x-1/2 items-center gap-2">
+                  {images.map((_, i) => (
+                    <button
+                      key={i}
+                      type="button"
+                      onClick={() => goTo(i)}
+                      className={"h-1.5 rounded-full transition-all duration-300 " + (i === slideIdx ? 'w-7 bg-volt' : 'w-1.5 bg-white/40 hover:bg-white/70')}
+                      aria-label={`Go to image ${i + 1}`}
+                    />
+                  ))}
+                </div>
               )}
+
+              {/* Badges */}
+              <div className="absolute right-4 top-4 z-10 flex flex-col items-end gap-2 sm:right-6 sm:top-6">
+                <span className={"border px-3 py-2 text-[11px] font-black uppercase tracking-[0.18em] clip-panel shadow-lg backdrop-blur-sm sm:text-xs " + (STATUS_COLORS[product.status] ?? 'bg-black/80 text-white border-white/30')}>
+                  {product.status.replace(/_/g, ' ')}
+                </span>
+                {product.is_featured && (
+                  <span className="flex items-center gap-1.5 bg-volt px-3 py-2 text-[11px] font-black uppercase text-asphalt clip-panel shadow-lg sm:text-xs">
+                    <Award className="h-3.5 w-3.5" /> Featured
+                  </span>
+                )}
+              </div>
             </div>
 
             {/* Buy panel */}
             <div className="flex flex-col gap-4">
-              {/* Badges */}
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="inline-flex items-center gap-1.5 border border-ignition/30 bg-ignition/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-ignition clip-panel sm:text-xs">
-                  <Package className="h-3 w-3 sm:h-3.5 sm:w-3.5" /> Spare Part
-                </span>
-                <span className="border border-white/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.15em] text-slate-400 clip-panel sm:text-xs">{product.category}</span>
-              </div>
 
               {/* Title */}
               <div>
                 <p className="text-[10px] font-black uppercase tracking-[0.22em] text-slate-500 sm:text-xs">{product.brand}</p>
                 <h1 className="mt-1 text-2xl font-black uppercase leading-tight text-white sm:text-3xl">{product.name}</h1>
-                <p className="mt-2 text-sm leading-6 text-slate-300">{product.short_description}</p>
               </div>
 
               {/* Part number + warranty */}
@@ -655,7 +658,7 @@ function SparePartDetailView({
               <div className="border border-white/10 bg-white/[0.03] p-4 clip-panel">
                 <p className="text-[10px] font-black uppercase tracking-[0.22em] text-slate-500">Price</p>
                 <div className="mt-1 flex flex-wrap items-end gap-3">
-                  <span className="text-4xl font-black text-volt">{formatMoney(Number(product.price))}</span>
+                  <span className="text-3xl font-black text-volt">{formatMoney(Number(product.price))}</span>
                   {product.compare_at_price && (
                     <div className="flex flex-col pb-0.5">
                       <span className="text-sm font-bold text-slate-500 line-through">{formatMoney(Number(product.compare_at_price))}</span>
@@ -695,20 +698,7 @@ function SparePartDetailView({
           {/* ── Bottom: Details row ── */}
           <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
 
-            {/* Specs */}
-            {specEntries.length > 0 && (
-              <div className="border border-white/10 bg-white/[0.03] clip-panel">
-                <div className="border-b border-white/10 px-4 py-3">
-                  <h3 className="text-[10px] font-black uppercase tracking-[0.28em] text-slate-400">Technical Specs</h3>
-                </div>
-                {specEntries.map(([key, value], i) => (
-                  <div key={key} className={"flex items-center justify-between gap-4 px-4 py-3 " + (i % 2 === 0 ? 'bg-white/[0.02]' : '')}>
-                    <span className="text-[10px] font-black uppercase tracking-[0.15em] text-slate-500">{key}</span>
-                    <span className="text-right text-sm font-black text-white">{value}</span>
-                  </div>
-                ))}
-              </div>
-            )}
+
 
             {/* What's included */}
             <div className="border border-white/10 bg-white/[0.03] p-5 clip-panel">
@@ -754,6 +744,20 @@ function SparePartDetailView({
             </div>
           </div>
 
+        </div>
+      </section>
+
+      {/* ── Body / Description ── */}
+      <section className="py-10 sm:py-14">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+          {product.body ? (
+            <div
+              className="prose prose-invert prose-sm sm:prose-base max-w-none prose-headings:font-black prose-headings:uppercase prose-headings:tracking-wide prose-a:text-volt prose-img:rounded prose-img:border prose-img:border-white/10"
+              dangerouslySetInnerHTML={{ __html: product.body }}
+            />
+          ) : (
+            <p className="text-sm leading-7 text-slate-400">{product.short_description}</p>
+          )}
         </div>
       </section>
 

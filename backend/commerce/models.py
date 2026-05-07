@@ -129,6 +129,7 @@ class Product(models.Model):
     image = models.ImageField(upload_to='products/', null=True, blank=True, help_text='Upload image file (overrides Image URL if set)')
     power_score = models.PositiveSmallIntegerField(default=80)
     short_description = models.CharField(max_length=240)
+    body = models.TextField(blank=True, help_text='Rich HTML content — shown on product details page below specs.')
     specs = models.JSONField(default=dict, blank=True)
     is_featured = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
